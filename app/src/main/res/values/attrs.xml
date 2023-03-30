@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="appBackground" format="color"/>
+    <attr name="cardback" format="color"/>
+    <attr name="texts" format="color"/>
+    <attr name="buttons" format="color"/>
+    <attr name="listitems" format="color"/>
+    <attr name="blueText" format="color"/>
+    <attr name="blueElements" format="color"/>
+    <attr name="greyOut" format="color"/>
+
+</resources>
