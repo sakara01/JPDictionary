@@ -48,10 +48,106 @@
         app:layout_constraintTop_toBottomOf="@+id/etListName"
         tools:listitem="@layout/word_item"/>
 
+    <FrameLayout
+        android:id="@+id/frame1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginBottom="6dp"
+        app:layout_constraintBottom_toTopOf="@+id/cardView"
+        app:layout_constraintStart_toStartOf="parent">
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnHideWord"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:backgroundTint="?attr/texts"
+        app:cornerRadius="10dp"
+        />
+
+        <TextView
+            android:id="@+id/JPtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/appBackground"
+            android:fontFamily="monospace"
+            android:text=" JP "
+            android:textSize="20sp"
+            android:translationZ="20dp"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:id="@+id/JPrule"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:translationZ="0dp"
+            android:src="@drawable/line"
+            android:scaleX="2.4"
+            android:scaleY="2"
+            app:tint="?attr/appBackground"
+            android:layout_gravity="center"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/frame2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="6dp"
+        app:layout_constraintBottom_toTopOf="@+id/cardView"
+        app:layout_constraintStart_toEndOf="@id/frame1">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnHideDef"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:backgroundTint="?attr/blueText"
+            app:cornerRadius="10dp"
+            />
+
+        <TextView
+            android:id="@+id/ENtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/appBackground"
+            android:fontFamily="monospace"
+            android:text=" EN "
+            android:textSize="20sp"
+            android:translationZ="20dp"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:id="@+id/ENrule"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:translationZ="0dp"
+            android:src="@drawable/line"
+            android:scaleX="2.4"
+            android:scaleY="2"
+            app:tint="?attr/appBackground"
+            android:layout_gravity="center"/>
+
+    </FrameLayout>
+
+
+    <ImageButton
+        android:id="@+id/btnAdd"
+        android:layout_width="180px"
+        android:layout_height="130px"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="7dp"
+        android:background="@drawable/roundbutton"
+        android:backgroundTint="?attr/buttons"
+        android:src="@drawable/plus"
+        app:layout_constraintBottom_toTopOf="@+id/cardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
+        android:backgroundTint="?attr/appBackground"
+        app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
