@@ -4,6 +4,7 @@
         <item name="appBackground">#F1F1F1</item>
         <item name="cardback">#FFFFFF</item>
         <item name="texts">#151515</item>
+        <item name="textsGreyed">#151515</item>
         <item name="buttons">#002265</item>
         <item name="listitems">#7596CD</item>
         <item name="blueText">#113573</item>
@@ -14,8 +15,9 @@
 
     <style name="Dark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="appBackground">#2B2A2A</item>
-        <item name="cardback">#3E3E3E</item>
+        <item name="cardback">#303030</item>
         <item name="texts">#E3E3E3</item>
+        <item name="textsGreyed">#E3E3E3</item>
         <item name="buttons">#274E91</item>
         <item name="listitems">#232F47</item>
         <item name="blueText">#5A80C2</item>

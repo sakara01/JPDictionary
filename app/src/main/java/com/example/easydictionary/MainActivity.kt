@@ -18,22 +18,25 @@ class MainActivity : AppCompatActivity() {
         addBtn = findViewById(R.id.btnAdd)
 
         val words1 = arrayOf("寝る", "走る","食べる")
-        val definitions1 = arrayOf("To sleep from main", "To run from main", "To eat from main")
+        val hiragana1 = arrayOf("ねる", "はしる","たべる")
+        val definitions1 = arrayOf("To sleep", "To run", "To eat")
 
-        val words2 = arrayOf("寝る", "走る","食べる")
-        val definitions2 = arrayOf("Random Noun", "A noun ig", "These are nouns")
+        val words2 = arrayOf("家族", "世界","お店")
+        val hiragana2 = arrayOf("かぞく", "せかい","おみせ")
+        val definitions2 = arrayOf("Family", "World", "Shop")
 
-        val words3 = arrayOf("寝る", "走る","食べる")
-        val definitions3 = arrayOf("An adjective", "Pretend :)", "New adjective")
+        val words3 = arrayOf("狭い", "少ない","高い")
+        val hiragana3 = arrayOf("せまい", "すくない","たかい")
+        val definitions3 = arrayOf("Narrow", "Few", "Tall")
 
-        data class Value(val word: Array<String>, val def: Array<String>) {}
+        data class Value(val words: Array<String>,val hiraganas: Array<String>, val defs: Array<String>) {}
 
         val key1 = "Verbs"
-        val wordndef1 = Value(words1,definitions1)
+        val wordndef1 = Value(words1,hiragana1,definitions1)
         val key2 = "Nouns"
-        val wordndef2 = Value(words2,definitions2)
+        val wordndef2 = Value(words2,hiragana2,definitions2)
         val key3 = "Adjectives"
-        val wordndef3 = Value(words3,definitions3)
+        val wordndef3 = Value(words3,hiragana3,definitions3)
 
         val mapOfAllLists = mutableMapOf<String, Value>()
         //key is name of list, and wordndef holds arrays of both words and defs
@@ -51,8 +54,17 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "item clicked", Toast.LENGTH_SHORT).show()
             val nameOfSelected = view.findViewById<TextView>(R.id.tvListName)
             val intent = Intent(this,ListActivity::class.java)
-            intent.putExtra("wordList",mapOfAllLists[nameOfSelected.text]!!.word)
-            intent.putExtra("defList",mapOfAllLists[nameOfSelected.text]!!.def)
+            if (nameOfSelected.text == "new list"){
+                val rando = arrayOf<String>()
+                intent.putExtra("wordList", rando)
+                intent.putExtra("hiraganaList", rando)
+                intent.putExtra("defList", rando)
+            }
+            else {
+                intent.putExtra("wordList", mapOfAllLists[nameOfSelected.text]!!.words)
+                intent.putExtra("hiraganaList", mapOfAllLists[nameOfSelected.text]!!.hiraganas)
+                intent.putExtra("defList", mapOfAllLists[nameOfSelected.text]!!.defs)
+            }
             startActivity(intent)
             Animatoo.animateSlideLeft(this)
         }

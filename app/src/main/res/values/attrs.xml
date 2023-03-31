@@ -3,6 +3,7 @@
     <attr name="appBackground" format="color"/>
     <attr name="cardback" format="color"/>
     <attr name="texts" format="color"/>
+    <attr name="textsGreyed" format="color"/>
     <attr name="buttons" format="color"/>
     <attr name="listitems" format="color"/>
     <attr name="blueText" format="color"/>

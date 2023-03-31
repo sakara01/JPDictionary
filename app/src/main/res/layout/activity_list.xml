@@ -39,7 +39,7 @@
 
     <ListView
         android:id="@+id/lvWordList"
-        android:layout_width="391dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
@@ -134,7 +134,7 @@
         android:layout_width="180px"
         android:layout_height="130px"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="7dp"
+        android:layout_marginBottom="9dp"
         android:background="@drawable/roundbutton"
         android:backgroundTint="?attr/buttons"
         android:src="@drawable/plus"
@@ -145,10 +145,120 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:backgroundTint="?attr/appBackground"
-        app:cardElevation="8dp"
+        android:layout_height="68dp"
+        android:backgroundTint="?attr/cardback"
+        app:cardElevation="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        >
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+              <androidx.constraintlayout.widget.ConstraintLayout
+                  android:id="@+id/constraint1"
+                  android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:layout_height="match_parent">
+
+                  <ImageView
+                      android:layout_width="0px"
+                      android:layout_height="0px"
+                      android:src="@mipmap/books"
+                      android:scaleX="1"
+                      android:scaleY="1.2"
+                      app:tint="?attr/texts"
+                      android:layout_marginTop="12dp"
+                      app:layout_constraintBottom_toTopOf="@+id/tvView"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toStartOf="parent"
+                      app:layout_constraintTop_toTopOf="parent" />
+
+                  <TextView
+                      android:id="@+id/tvView"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginBottom="7dp"
+                      android:fontFamily="monospace"
+                      android:text="List"
+                      android:textColor="?attr/texts"
+                      app:layout_constraintBottom_toBottomOf="parent"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toStartOf="parent" />
+
+              </androidx.constraintlayout.widget.ConstraintLayout>
+              <androidx.constraintlayout.widget.ConstraintLayout
+                  android:id="@+id/constraint2"
+                  android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:layout_height="match_parent">
+
+                  <ImageView
+                      android:layout_width="0px"
+                      android:layout_height="0px"
+                      android:src="@mipmap/flashcards"
+                      app:tint="?attr/texts"
+                      android:layout_marginTop="11dp"
+                      app:layout_constraintBottom_toTopOf="@+id/tvFlashcards"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toStartOf="parent"
+                      app:layout_constraintTop_toTopOf="parent" />
+
+                  <TextView
+                      android:id="@+id/tvFlashcards"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginBottom="7dp"
+                      android:fontFamily="monospace"
+                      android:text="Flashcards"
+                      android:textColor="?attr/texts"
+                      app:layout_constraintBottom_toBottomOf="parent"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toStartOf="parent" />
+
+              </androidx.constraintlayout.widget.ConstraintLayout>
+              <androidx.constraintlayout.widget.ConstraintLayout
+                  android:id="@+id/constraint3"
+                  android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:layout_height="match_parent">
+
+                  <ImageView
+                      android:layout_width="0px"
+                      android:layout_height="0px"
+                      android:src="@mipmap/test"
+                      app:tint="?attr/texts"
+                      android:layout_marginTop="10dp"
+                      android:layout_marginBottom="1dp"
+                      android:layout_marginStart="2dp"
+                      app:layout_constraintBottom_toTopOf="@+id/tvTest"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toStartOf="parent"
+                      app:layout_constraintTop_toTopOf="parent" />
+
+                  <TextView
+                      android:id="@+id/tvTest"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginBottom="7dp"
+                      android:fontFamily="monospace"
+                      android:text="Test"
+                      android:textColor="?attr/texts"
+                      app:layout_constraintBottom_toBottomOf="parent"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toStartOf="parent" />
+
+              </androidx.constraintlayout.widget.ConstraintLayout>
+
+          </LinearLayout>
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
