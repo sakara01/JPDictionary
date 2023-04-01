@@ -2,21 +2,32 @@ package com.example.easydictionary
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.*
+import android.widget.ImageButton
+import android.widget.ListView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
+import com.example.easydictionary.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
     private lateinit var addBtn: ImageButton
+    private lateinit var myListView: ListView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Light)
         window.statusBarColor = ContextCompat.getColor(this, R.color.grey)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         addBtn = findViewById(R.id.btnAdd)
+        myListView= findViewById(R.id.lvListOfLists)
+
+        val listOfLists = mutableListOf("Verbs","Nouns","Adjectives")
 
         val words1 = arrayOf("寝る", "走る","食べる")
         val hiragana1 = arrayOf("ねる", "はしる","たべる")
@@ -42,6 +53,21 @@ class MainActivity : AppCompatActivity() {
         val key3 = "Adjectives"
         val wordndef3 = Value(words3,hiragana3,romaji3, definitions3)
 
+        val numWords1 = words1.size
+        val numWords2 = words2.size
+        val numWords3 = words3.size
+        val numWords = arrayOf(numWords1,numWords2, numWords3)
+
+        val arrayOfListInfo = ArrayList<ListData>()
+
+        for(i in listOfLists.indices){
+            val unit = ListData(listOfLists[i], numWords[i])
+            arrayOfListInfo.add(unit)
+        }
+
+        val adapterMiddle = ListAdapter(this,arrayOfListInfo)
+        binding.lvListOfLists.adapter = adapterMiddle
+
         val mapOfAllLists = mutableMapOf<String, Value>()
         //key is name of list, and wordndef holds arrays of both words and defs
         mapOfAllLists[key1] = wordndef1
@@ -50,10 +76,6 @@ class MainActivity : AppCompatActivity() {
 
         println(mapOfAllLists)
 
-        val listOfLists = mutableListOf("Verbs","Nouns","Adjectives")
-        val myListView= findViewById<ListView>(R.id.lvListOfLists)
-        val adapter = ArrayAdapter(this, R.layout.list_item,R.id.tvListName, listOfLists)
-        myListView.adapter= adapter
         myListView.setOnItemClickListener { parent, view, position, id ->
             Toast.makeText(this, "item clicked", Toast.LENGTH_SHORT).show()
             val nameOfSelected = view.findViewById<TextView>(R.id.tvListName)
@@ -77,7 +99,7 @@ class MainActivity : AppCompatActivity() {
 
         addBtn.setOnClickListener{
             listOfLists.add("new list")
-            adapter.notifyDataSetChanged()
+            adapterMiddle.notifyDataSetChanged()
         }
     }
 }
