@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.ArrayMap
 import android.widget.*
+import androidx.core.content.ContextCompat
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 
 
@@ -12,7 +13,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var addBtn: ImageButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.Dark)
+        setTheme(R.style.Light)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.grey)
         setContentView(R.layout.activity_main)
 
         addBtn = findViewById(R.id.btnAdd)
@@ -75,3 +77,5 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
+//icon credits to pngegg, icons8

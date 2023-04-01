@@ -8,6 +8,7 @@ import android.view.View
 import android.view.animation.AlphaAnimation
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.example.easydictionary.databinding.ActivityListBinding
@@ -33,6 +34,7 @@ class ListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Light)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.grey)
         binding = ActivityListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -108,6 +110,9 @@ class ListActivity : AppCompatActivity() {
         btnAdd.setOnClickListener {
             btnAdd.startAnimation(buttonClick)
             btnAdd.startAnimation(buttonClick)
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+            Animatoo.animateSlideLeft(this)
         }
 
         constraint1.setOnClickListener{
