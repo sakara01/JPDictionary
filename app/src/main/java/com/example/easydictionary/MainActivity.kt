@@ -1,10 +1,9 @@
 package com.example.easydictionary
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.ArrayMap
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 
@@ -34,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         val romaji3 = arrayOf("semai","sukunai", "takai")
         val definitions3 = arrayOf("Narrow", "Few", "Tall")
 
-        data class Value(val words: Array<String>,val hiraganas: Array<String>,val romajis: Array<String>, val defs: Array<String>) {}
+        data class Value(val words: Array<String>,val hiraganas: Array<String>,val romajis: Array<String>, val defs: Array<String>)
 
         val key1 = "Verbs"
         val wordndef1 = Value(words1,hiragana1,romaji1, definitions1)
@@ -45,15 +44,15 @@ class MainActivity : AppCompatActivity() {
 
         val mapOfAllLists = mutableMapOf<String, Value>()
         //key is name of list, and wordndef holds arrays of both words and defs
-        mapOfAllLists.put(key1,wordndef1)
-        mapOfAllLists.put(key2,wordndef2)
-        mapOfAllLists.put(key3,wordndef3)
+        mapOfAllLists[key1] = wordndef1
+        mapOfAllLists[key2] = wordndef2
+        mapOfAllLists[key3] = wordndef3
 
         println(mapOfAllLists)
 
-        val listOfLists = mutableListOf<String>("Verbs","Nouns","Adjectives")
+        val listOfLists = mutableListOf("Verbs","Nouns","Adjectives")
         val myListView= findViewById<ListView>(R.id.lvListOfLists)
-        val adapter = ArrayAdapter<String>(this, R.layout.list_item,R.id.tvListName, listOfLists)
+        val adapter = ArrayAdapter(this, R.layout.list_item,R.id.tvListName, listOfLists)
         myListView.adapter= adapter
         myListView.setOnItemClickListener { parent, view, position, id ->
             Toast.makeText(this, "item clicked", Toast.LENGTH_SHORT).show()

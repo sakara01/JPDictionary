@@ -14,7 +14,7 @@
         android:layout_marginStart="36dp"
         android:layout_marginTop="40dp"
         android:text="My Lists"
-        android:textSize="26dp"
+        android:textSize="26sp"
         android:textColor="?attr/texts"
         android:fontFamily="monospace"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,8 +34,8 @@
 
     <ImageButton
         android:id="@+id/btnAdd"
-        android:layout_width="180px"
-        android:layout_height="130px"
+        android:layout_width="68dp"
+        android:layout_height="48dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/roundbutton"
@@ -43,6 +43,7 @@
         android:src="@drawable/plus"
         app:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="add new list"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

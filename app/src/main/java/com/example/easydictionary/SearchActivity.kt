@@ -1,14 +1,13 @@
 package com.example.easydictionary
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.animation.AlphaAnimation
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageButton
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
-import com.example.easydictionary.databinding.ActivityListBinding
 import com.example.easydictionary.databinding.ActivitySearchBinding
 
 class SearchActivity : AppCompatActivity() {
@@ -43,11 +42,11 @@ class SearchActivity : AppCompatActivity() {
         val romajis = arrayOf("sensei","kyouin", "kyoushi")
         val definitions = arrayOf("teacher, instructor, mentor", "teacher,instructor,teaching staff", "teacher (classroom)")
 
-        for(i in words!!.indices){
-            val unit = Word(words!![i], hiraganas!![i], romajis!![i], definitions!![i])
+        for(i in words.indices){
+            val unit = Word(words[i], hiraganas[i], romajis[i], definitions[i])
             wordList.add(unit)
         }
-        var adapterMiddle = SearchAdapter(this,wordList)
+        val adapterMiddle = SearchAdapter(this,wordList)
         binding.lvResultsList.adapter = adapterMiddle
 
         btnBack.setOnClickListener{

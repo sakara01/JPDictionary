@@ -45,18 +45,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvWord" />
 
-    <ImageButton
+    <FrameLayout
         android:id="@+id/btnSpeak"
-        android:layout_width="34dp"
-        android:layout_height="28dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/roundbutton"
-        android:src="@drawable/speak"
-        app:backgroundTint="?attr/blueVariant"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="?attr/appBackground" />
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:layout_width="34dp"
+            android:layout_height="28dp"
+            android:background="@drawable/roundbutton"
+            android:src="@drawable/speak"
+            app:backgroundTint="?attr/blueVariant"
+            app:tint="?attr/appBackground"
+            android:layout_gravity="center"
+            android:contentDescription="speak word"/>
+    </FrameLayout>
 
     <TextView
         android:id="@+id/tvOpen"
@@ -68,6 +74,7 @@
         android:text="["
         android:textSize="24sp"
         android:fontFamily="monospace"
+        android:textColor="?attr/greyOut"
         app:layout_constraintBottom_toBottomOf="@+id/tvWord"
         app:layout_constraintStart_toEndOf="@+id/tvWord"
         app:layout_constraintTop_toTopOf="@+id/tvWord" />
@@ -94,6 +101,7 @@
         android:textSize="24sp"
         android:fontFamily="monospace"
         android:layout_marginStart="2dp"
+        android:textColor="?attr/greyOut"
         app:layout_constraintBottom_toBottomOf="@+id/tvOpen"
         app:layout_constraintStart_toEndOf="@+id/tvHiragana"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

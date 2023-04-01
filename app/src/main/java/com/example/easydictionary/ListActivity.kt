@@ -1,15 +1,15 @@
 package com.example.easydictionary
 
-import android.animation.ValueAnimator.REVERSE
 import android.content.Intent
 import android.os.Bundle
-import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AlphaAnimation
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.example.easydictionary.databinding.ActivityListBinding
 
@@ -64,7 +64,7 @@ class ListActivity : AppCompatActivity() {
             val unit = Word(words!![i], hiraganas!![i], romajis!![i], definitions!![i])
             wordList.add(unit)
         }
-        var adapterMiddle = MyAdapter(this,wordList)
+        val adapterMiddle = MyAdapter(this,wordList)
         binding.lvWordList.adapter = adapterMiddle
 
         backBtn.setOnClickListener{
@@ -134,25 +134,25 @@ class ListActivity : AppCompatActivity() {
         }
     }
 
-    fun hideAllWords(){
+    private fun hideAllWords(){
         for(i in words!!.indices){
             wordList[i].name = ""
             wordList[i].hiragana = ""
         }
     }
-    fun showAllWords(){
+    private fun showAllWords(){
         for(i in words!!.indices){
             wordList[i].name = words!![i]
             wordList[i].hiragana = hiraganas!![i]
         }
     }
-    fun hideAllDefs(){
+    private fun hideAllDefs(){
         for(i in definitions!!.indices){
             wordList[i].definition = ""
         }
     }
 
-    fun showAllDefs(){
+    private fun showAllDefs(){
         for(i in definitions!!.indices){
             wordList[i].definition = definitions!![i]
         }
