@@ -29,6 +29,7 @@ class ListActivity : AppCompatActivity() {
     private lateinit var constraint3: View
     private var words: Array<String>? = null
     private var hiraganas: Array<String>? = null
+    private var romajis: Array<String>? = null
     private var definitions: Array<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +41,7 @@ class ListActivity : AppCompatActivity() {
 
         words = intent.extras?.getStringArray("wordList")
         hiraganas = intent.extras?.getStringArray("hiraganaList")
+        romajis = intent.extras?.getStringArray("romajiList")
         definitions = intent.extras?.getStringArray("defList")
 
         backBtn = findViewById(R.id.btnBack)
@@ -59,7 +61,7 @@ class ListActivity : AppCompatActivity() {
         wordList = ArrayList()
 
         for(i in words!!.indices){
-            val unit = Word(words!![i], hiraganas!![i], definitions!![i])
+            val unit = Word(words!![i], hiraganas!![i], romajis!![i], definitions!![i])
             wordList.add(unit)
         }
         var adapterMiddle = MyAdapter(this,wordList)
