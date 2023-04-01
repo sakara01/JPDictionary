@@ -88,22 +88,27 @@
         android:text="teacher, instructor, mentor"
         android:fontFamily="monospace"
         android:textSize="16sp"
-        android:textColor="?attr/blueText"
+        android:textColor="?attr/blue"
         android:layout_marginTop="8dp"
         android:paddingBottom="18dp"
         app:layout_constraintStart_toStartOf="@id/tvKanji"
         app:layout_constraintTop_toBottomOf="@id/tvRomaji"/>
 
-    <ImageButton
-        android:layout_width="36dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="16dp"
+    <FrameLayout
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/roundbutton"
-        android:backgroundTint="?attr/blueText"
-        android:src="@drawable/plus"
-        app:tint="?attr/appBackground"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toTopOf="parent" >
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/roundbutton"
+            android:backgroundTint="?attr/blue"
+            android:src="@drawable/plus"
+            app:tint="?attr/appBackground"
+            android:contentDescription="add to list"/>
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

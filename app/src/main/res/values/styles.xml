@@ -7,8 +7,8 @@
         <item name="textsGreyed">#272727</item>
         <item name="buttons">#002265</item>
         <item name="listitems">#7596CD</item>
-        <item name="blueText">#113573</item>
-        <item name="blueElements">#1B51AC</item>
+        <item name="blue">#113573</item>
+        <item name="blueVariant">#1B51AC</item>
         <item name="greyOut">#676767</item>
 
     </style>
@@ -20,8 +20,8 @@
         <item name="textsGreyed">#D3D3D3</item>
         <item name="buttons">#274E91</item>
         <item name="listitems">#232F47</item>
-        <item name="blueText">#5A80C2</item>
-        <item name="blueElements">#507ECC</item>
+        <item name="blue">#6B98E6</item>
+        <item name="blueVariant">#507ECC</item>
         <item name="greyOut">#B5B5B5</item>
 
 

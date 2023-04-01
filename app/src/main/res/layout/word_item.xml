@@ -28,7 +28,7 @@
         android:fontFamily="monospace"
         android:paddingBottom="16dp"
         android:text="Example definition of word."
-        android:textColor="?attr/blueText"
+        android:textColor="?attr/blue"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/tvWord"
         app:layout_constraintTop_toBottomOf="@+id/tvWord" />
@@ -53,7 +53,7 @@
         android:layout_marginEnd="16dp"
         android:background="@drawable/roundbutton"
         android:src="@drawable/speak"
-        app:backgroundTint="?attr/blueElements"
+        app:backgroundTint="?attr/blueVariant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?attr/appBackground" />

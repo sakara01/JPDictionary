@@ -12,10 +12,11 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:src="@drawable/back"
-        app:tint="?attr/blueElements"
+        app:tint="?attr/blueVariant"
         android:scaleX="1.2"
         android:scaleY="1.2"
         android:background="@null"
+        android:contentDescription="back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:backgroundTint="?attr/blueElements"
+        android:backgroundTint="?attr/blueVariant"
         android:ems="10"
         android:fontFamily="monospace"
         android:hint="Enter List Name"
@@ -35,7 +36,8 @@
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:importantForAutofill="no" />
 
     <ListView
         android:id="@+id/lvWordList"
@@ -62,6 +64,7 @@
         android:layout_height="50dp"
         android:backgroundTint="?attr/texts"
         app:cornerRadius="10dp"
+        android:contentDescription="hide Kanji/Hiragana text"
         />
 
         <TextView
@@ -84,7 +87,8 @@
             android:scaleX="2.4"
             android:scaleY="2"
             app:tint="?attr/appBackground"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:contentDescription="JP strikethrough"/>
 
     </FrameLayout>
 
@@ -100,8 +104,9 @@
             android:id="@+id/btnHideDef"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:backgroundTint="?attr/blueText"
+            android:backgroundTint="?attr/blue"
             app:cornerRadius="10dp"
+            android:contentDescription="Hide Definitions"
             />
 
         <TextView
@@ -113,7 +118,8 @@
             android:text=" EN "
             android:textSize="20sp"
             android:translationZ="20dp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            />
 
         <ImageView
             android:id="@+id/ENrule"
@@ -124,15 +130,16 @@
             android:scaleX="2.4"
             android:scaleY="2"
             app:tint="?attr/appBackground"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:contentDescription="EN strikethrough"/>
 
     </FrameLayout>
 
 
     <ImageButton
         android:id="@+id/btnAdd"
-        android:layout_width="180px"
-        android:layout_height="130px"
+        android:layout_width="68dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="9dp"
         android:background="@drawable/roundbutton"
@@ -140,7 +147,9 @@
         android:src="@drawable/plus"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/white" />
+        app:tint="@color/white"
+        android:contentDescription="Add words to list"
+        />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -159,7 +168,8 @@
 
           <LinearLayout
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:baselineAligned="false">
 
               <androidx.constraintlayout.widget.ConstraintLayout
                   android:id="@+id/constraint1"
@@ -179,7 +189,8 @@
                       app:layout_constraintBottom_toTopOf="@+id/tvView"
                       app:layout_constraintEnd_toEndOf="parent"
                       app:layout_constraintStart_toStartOf="parent"
-                      app:layout_constraintTop_toTopOf="parent" />
+                      app:layout_constraintTop_toTopOf="parent"
+                      android:contentDescription="books"/>
 
                   <TextView
                       android:id="@+id/tvView"
@@ -209,7 +220,8 @@
                       app:layout_constraintBottom_toTopOf="@+id/tvFlashcards"
                       app:layout_constraintEnd_toEndOf="parent"
                       app:layout_constraintStart_toStartOf="parent"
-                      app:layout_constraintTop_toTopOf="parent" />
+                      app:layout_constraintTop_toTopOf="parent"
+                      android:contentDescription="flashcards"/>
 
                   <TextView
                       android:id="@+id/tvFlashcards"
@@ -241,7 +253,8 @@
                       app:layout_constraintBottom_toTopOf="@+id/tvTest"
                       app:layout_constraintEnd_toEndOf="parent"
                       app:layout_constraintStart_toStartOf="parent"
-                      app:layout_constraintTop_toTopOf="parent" />
+                      app:layout_constraintTop_toTopOf="parent"
+                      android:contentDescription="test"/>
 
                   <TextView
                       android:id="@+id/tvTest"

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.animation.AlphaAnimation
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
@@ -14,7 +15,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
     private lateinit var wordList: ArrayList<Word>
     private lateinit var btnBack: ImageButton
-    private lateinit var btnClose: ImageButton
+    private lateinit var btnClose: FrameLayout
     private lateinit var etInput: EditText
 
 
@@ -57,7 +58,7 @@ class SearchActivity : AppCompatActivity() {
         btnClose.setOnClickListener{
             btnClose.startAnimation(buttonClick)
             etInput.text.clear()
-            etInput.hint = "せんせい, sensei,teacher"
+            etInput.hint = "せんせい, sensei, teacher"
         }
 
     }
