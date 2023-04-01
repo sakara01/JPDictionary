@@ -8,10 +8,9 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintWidth_percent="0.85"
         android:layout_height="90dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="6dp"
+        app:cardElevation="8dp"
         android:backgroundTint="?attr/listitems"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,7 +20,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
+            android:background="@drawable/search_border"
             >
 
             <TextView
@@ -32,11 +31,21 @@
                 android:text="Default List"
                 android:textColor="?attr/texts"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.507" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20 words"
+                android:fontFamily="monospace"
+                android:textSize="16sp"
+                android:textColor="?attr/blue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvListName"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
