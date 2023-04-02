@@ -9,6 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.example.easydictionary.databinding.ActivitySearchBinding
+import com.jakewharton.rxbinding.widget.RxTextView
+import org.json.JSONArray
+import org.json.JSONObject
+import java.net.URL
+import java.util.concurrent.TimeUnit
+
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
@@ -16,6 +22,10 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var btnBack: ImageButton
     private lateinit var btnClose: FrameLayout
     private lateinit var etInput: EditText
+    private lateinit var words: MutableList<String>
+    private lateinit var hiraganas: MutableList<String>
+    private lateinit var romajis: MutableList<String>
+    private lateinit var definitions: MutableList<String>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,10 +47,10 @@ class SearchActivity : AppCompatActivity() {
         etInput = findViewById(R.id.etInput)
 
         //send request to jisho and use loop to add to these arrays
-        val words = arrayOf("先生", "教員","教師")
-        val hiraganas = arrayOf("せんせい", "きょういん","きょうし")
-        val romajis = arrayOf("sensei","kyouin", "kyoushi")
-        val definitions = arrayOf("teacher, instructor, mentor", "teacher,instructor,teaching staff", "teacher (classroom)")
+        words = mutableListOf()
+        hiraganas = mutableListOf()
+        romajis = mutableListOf()
+        definitions = mutableListOf()
 
         for(i in words.indices){
             val unit = Word(words[i], hiraganas[i], romajis[i], definitions[i])
@@ -60,5 +70,46 @@ class SearchActivity : AppCompatActivity() {
             etInput.hint = "せんせい, sensei, teacher"
         }
 
+        RxTextView.textChanges(etInput)
+            .debounce(1, TimeUnit.SECONDS)
+            .subscribe { textChanged: CharSequence? ->
+                //make request to API here
+                var info = URL("https://jisho.org/api/v1/search/words?keyword=water").readText()
+                parseJson(info)
+                runOnUiThread {
+                    // Stuff that updates the UI
+                    adapterMiddle.notifyDataSetChanged()
+                }
+            }
     }
+
+    private fun parseJson(info: String){
+        var jsonArray: JSONArray = JSONObject(info).get("data") as JSONArray
+        for (i in 0 until jsonArray.length()){
+            var jsonObject = jsonArray.getJSONObject(i)
+            parseEach(jsonObject)
+        }
+        wordList.clear()
+        for(i in words.indices){
+            val unit = Word(words[i], hiraganas[i], romajis[i], definitions[i])
+            wordList.add(unit)
+        }
+    }
+
+    private fun parseEach(jsonObject: JSONObject?) {
+        //get kanji and hiragana
+        var jpobject: JSONObject = if (jsonObject!!.has("japanese")) (jsonObject?.get("japanese") as JSONArray).getJSONObject(0) else ("none" as JSONObject)
+        var kanji = if (jpobject.has("word")) jpobject.get("word") else "none"
+        var hiragana = if (jpobject.has("reading")) jpobject.get("reading") else "none"
+        words.add(kanji.toString())
+        hiraganas.add(hiragana.toString())
+        romajis.add("lol")
+        //get english definitions
+        var enobject: JSONArray= ((jsonObject?.get("senses") as JSONArray).getJSONObject(0).get("english_definitions")) as JSONArray
+        var separator: String = ", "
+        var endefs = enobject.join(separator)
+        endefs = endefs.replace("\"","" )
+        definitions.add(endefs)
+    }
+
 }

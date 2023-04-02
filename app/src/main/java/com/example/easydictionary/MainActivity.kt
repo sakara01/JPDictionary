@@ -105,3 +105,4 @@ class MainActivity : AppCompatActivity() {
 }
 
 //icon credits to pngegg, icons8
+//cats profile pics credit to  @cadmium_red on Freepik
