@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">EasyDictionary</string>
+    <string name="jisho_request">"https://jisho.org/api/v1/search/words?keyword=%s"</string>
 </resources>

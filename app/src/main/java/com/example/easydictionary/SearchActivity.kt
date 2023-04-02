@@ -1,6 +1,8 @@
 package com.example.easydictionary
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.animation.AlphaAnimation
 import android.widget.EditText
 import android.widget.FrameLayout
@@ -13,7 +15,9 @@ import com.jakewharton.rxbinding.widget.RxTextView
 import org.json.JSONArray
 import org.json.JSONObject
 import java.net.URL
+import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 
 class SearchActivity : AppCompatActivity() {
@@ -26,6 +30,9 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var hiraganas: MutableList<String>
     private lateinit var romajis: MutableList<String>
     private lateinit var definitions: MutableList<String>
+    private lateinit var adapterMiddle: SearchAdapter
+    private var timer: Timer = Timer()
+    private val DELAY: Long = 700 // Milliseconds
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +63,7 @@ class SearchActivity : AppCompatActivity() {
             val unit = Word(words[i], hiraganas[i], romajis[i], definitions[i])
             wordList.add(unit)
         }
-        val adapterMiddle = SearchAdapter(this,wordList)
+        adapterMiddle = SearchAdapter(this,wordList)
         binding.lvResultsList.adapter = adapterMiddle
 
         btnBack.setOnClickListener{
@@ -70,30 +77,47 @@ class SearchActivity : AppCompatActivity() {
             etInput.hint = "せんせい, sensei, teacher"
         }
 
-        RxTextView.textChanges(etInput)
-            .debounce(1, TimeUnit.SECONDS)
-            .subscribe { textChanged: CharSequence? ->
-                //make request to API here
-                var info = URL("https://jisho.org/api/v1/search/words?keyword=water").readText()
-                parseJson(info)
-                runOnUiThread {
-                    // Stuff that updates the UI
-                    adapterMiddle.notifyDataSetChanged()
-                }
+        etInput.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                timer.cancel()
+                timer = Timer()
+                timer.schedule(
+                    object : TimerTask() {
+                        override fun run() {
+                            var mythread = Thread {
+                                sendReq(etInput.text.toString())
+                            }
+                            if (mythread.isAlive()){
+                                mythread.run()
+                            }
+                            else mythread.start()
+                        }
+                    },
+                    DELAY
+                )
+            }
+        })
     }
 
     private fun parseJson(info: String){
+        clearAll()
+
         var jsonArray: JSONArray = JSONObject(info).get("data") as JSONArray
         for (i in 0 until jsonArray.length()){
             var jsonObject = jsonArray.getJSONObject(i)
             parseEach(jsonObject)
         }
-        wordList.clear()
         for(i in words.indices){
             val unit = Word(words[i], hiraganas[i], romajis[i], definitions[i])
             wordList.add(unit)
         }
+
     }
 
     private fun parseEach(jsonObject: JSONObject?) {
@@ -110,6 +134,30 @@ class SearchActivity : AppCompatActivity() {
         var endefs = enobject.join(separator)
         endefs = endefs.replace("\"","" )
         definitions.add(endefs)
+    }
+
+    private fun clearAll(){
+        words.clear()
+        hiraganas.clear()
+        romajis.clear()
+        definitions.clear()
+        wordList.clear()
+    }
+
+    private fun sendReq(raw:String){
+        if (raw.length >1) {
+            val jishoReq = resources.getString(
+                R.string.jisho_request, raw
+            )
+            println(jishoReq)
+            println("is it different thread?")
+            var info = URL(jishoReq).readText()
+            parseJson(info)
+            runOnUiThread {
+                // Stuff that updates the UI
+                adapterMiddle.notifyDataSetChanged()
+            }
+        }
     }
 
 }
