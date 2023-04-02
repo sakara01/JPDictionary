@@ -98,7 +98,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         addBtn.setOnClickListener{
-            listOfLists.add("new list")
+            val unit = ListData("new list", 0)
+            arrayOfListInfo.add(unit)
             adapterMiddle.notifyDataSetChanged()
         }
     }

@@ -14,7 +14,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="40dp"
         android:text="Hello Bekie,"
-        android:textSize="24sp"
+        android:textSize="21sp"
         android:textColor="?attr/texts"
         android:fontFamily="monospace"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,28 +35,28 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="-4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvSubTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvTitle"
-        >
+        app:layout_constraintTop_toTopOf="@id/tvTitle">
+
         <ImageView
             android:layout_width="match_parent"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
             android:layout_height="match_parent"
-            android:src="@mipmap/cats6"
-            android:contentDescription="profile image"/>
+            android:layout_gravity="center"
+            android:contentDescription="profile image"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/cats6" />
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/search_border"
-            />
+            android:background="@drawable/search_border" />
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/searchBar"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
+        android:layout_height="53dp"
         android:layout_marginTop="28dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
@@ -100,10 +100,10 @@
                     android:layout_height="match_parent"
                     android:hint="Search for any List"
                     android:textColorHint="?attr/greyOut"
-                    android:alpha="0.8"
+                    android:alpha="0.95"
                     android:paddingTop="14dp"
                     android:paddingBottom="14dp"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:letterSpacing="-0.05"
                     android:fontFamily="monospace"
                     android:background="@null"

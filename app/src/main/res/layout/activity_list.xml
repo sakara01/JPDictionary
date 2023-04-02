@@ -23,17 +23,17 @@
     <EditText
         android:id="@+id/etListName"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="6dp"
         android:backgroundTint="?attr/blueVariant"
-        android:ems="10"
         android:fontFamily="monospace"
-        android:hint="Enter List Name"
+        android:hint=" Enter List Name "
         android:textAlignment="center"
         android:inputType="textPersonName"
         android:textColorHint="?attr/greyOut"
         android:textColor="?attr/texts"
-        android:textSize="22sp"
+        android:textSize="18sp"
+        android:alpha="0.8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -43,7 +43,7 @@
         android:id="@+id/lvWordList"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,16 +54,16 @@
         android:id="@+id/frame1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
+        android:layout_marginStart="13dp"
         android:layout_marginBottom="6dp"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintStart_toStartOf="parent">
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnHideWord"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="58dp"
+        android:layout_height="52dp"
         android:backgroundTint="?attr/texts"
-        app:cornerRadius="10dp"
+        app:cornerRadius="7dp"
         android:contentDescription="hide Kanji/Hiragana text"
         />
 
@@ -74,7 +74,7 @@
             android:textColor="?attr/appBackground"
             android:fontFamily="monospace"
             android:text=" JP "
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:translationZ="20dp"
             android:layout_gravity="center"/>
 
@@ -96,16 +96,16 @@
         android:id="@+id/frame2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="6dp"
         android:layout_marginBottom="6dp"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintStart_toEndOf="@id/frame1">
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnHideDef"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="58dp"
+            android:layout_height="52dp"
             android:backgroundTint="?attr/blue"
-            app:cornerRadius="10dp"
+            app:cornerRadius="7dp"
             android:contentDescription="Hide Definitions"
             />
 
@@ -116,7 +116,7 @@
             android:textColor="?attr/appBackground"
             android:fontFamily="monospace"
             android:text=" EN "
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:translationZ="20dp"
             android:layout_gravity="center"
             />
@@ -154,7 +154,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="0dp"
-        android:layout_height="68dp"
+        android:layout_height="60dp"
         android:backgroundTint="?attr/cardback"
         app:cardElevation="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
