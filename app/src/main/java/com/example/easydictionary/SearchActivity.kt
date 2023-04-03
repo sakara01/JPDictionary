@@ -1,23 +1,21 @@
 package com.example.easydictionary
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.animation.AlphaAnimation
-import android.widget.EditText
-import android.widget.FrameLayout
-import android.widget.ImageButton
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.example.easydictionary.databinding.ActivitySearchBinding
-import com.jakewharton.rxbinding.widget.RxTextView
+import com.google.gson.Gson
+import dev.esnault.wanakana.core.Wanakana
 import org.json.JSONArray
 import org.json.JSONObject
 import java.net.URL
 import java.util.*
-import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
 
 class SearchActivity : AppCompatActivity() {
@@ -33,6 +31,9 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var adapterMiddle: SearchAdapter
     private var timer: Timer = Timer()
     private val DELAY: Long = 700 // Milliseconds
+    private lateinit var lvResultsList: ListView
+    private lateinit var addedWord: Word
+    private lateinit var addedList: ArrayList<Word>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,11 +48,15 @@ class SearchActivity : AppCompatActivity() {
         buttonClick.repeatMode = 2
         buttonClick.repeatCount = 1
 
+        //used to display list on search
         wordList = ArrayList()
+        //used to send data of selected words to list activity
+        addedList = ArrayList()
 
         btnBack = findViewById(R.id.btnBack)
         btnClose = findViewById(R.id.btnClose)
         etInput = findViewById(R.id.etInput)
+        lvResultsList = findViewById(R.id.lvResultsList)
 
         //send request to jisho and use loop to add to these arrays
         words = mutableListOf()
@@ -67,6 +72,11 @@ class SearchActivity : AppCompatActivity() {
         binding.lvResultsList.adapter = adapterMiddle
 
         btnBack.setOnClickListener{
+            val intent = Intent()
+            val gson = Gson()
+            val json: String = gson.toJson(addedList)
+            intent.putExtra("result", json) //pass intent extra here
+            setResult(RESULT_OK, intent)
             finish()
             Animatoo.animateSlideRight(this)
         }
@@ -96,13 +106,19 @@ class SearchActivity : AppCompatActivity() {
                             if (mythread.isAlive()){
                                 mythread.run()
                             }
-                            else mythread.start()
+                            else {
+                                mythread.start()
+                            }
                         }
                     },
                     DELAY
                 )
             }
         })
+
+        lvResultsList.setOnItemClickListener { parent, view, position, id ->
+            Toast.makeText(this, "search result clicked", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun parseJson(info: String){
@@ -122,14 +138,14 @@ class SearchActivity : AppCompatActivity() {
 
     private fun parseEach(jsonObject: JSONObject?) {
         //get kanji and hiragana
-        var jpobject: JSONObject = if (jsonObject!!.has("japanese")) (jsonObject?.get("japanese") as JSONArray).getJSONObject(0) else ("none" as JSONObject)
+        var jpobject: JSONObject = if (jsonObject!!.has("japanese")) (jsonObject.get("japanese") as JSONArray).getJSONObject(0) else ("none" as JSONObject)
         var kanji = if (jpobject.has("word")) jpobject.get("word") else "none"
         var hiragana = if (jpobject.has("reading")) jpobject.get("reading") else "none"
         words.add(kanji.toString())
         hiraganas.add(hiragana.toString())
-        romajis.add("lol")
+        romajis.add(Wanakana.toRomaji(hiragana.toString()))
         //get english definitions
-        var enobject: JSONArray= ((jsonObject?.get("senses") as JSONArray).getJSONObject(0).get("english_definitions")) as JSONArray
+        var enobject: JSONArray= ((jsonObject.get("senses") as JSONArray).getJSONObject(0).get("english_definitions")) as JSONArray
         var separator: String = ", "
         var endefs = enobject.join(separator)
         endefs = endefs.replace("\"","" )
@@ -150,7 +166,6 @@ class SearchActivity : AppCompatActivity() {
                 R.string.jisho_request, raw
             )
             println(jishoReq)
-            println("is it different thread?")
             var info = URL(jishoReq).readText()
             parseJson(info)
             runOnUiThread {
@@ -158,6 +173,12 @@ class SearchActivity : AppCompatActivity() {
                 adapterMiddle.notifyDataSetChanged()
             }
         }
+
+    }
+
+    fun testfun(pos: Int){
+        addedWord = wordList[pos]
+        addedList.add(addedWord)
     }
 
 }

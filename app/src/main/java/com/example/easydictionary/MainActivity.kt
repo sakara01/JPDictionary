@@ -1,21 +1,28 @@
 package com.example.easydictionary
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.example.easydictionary.databinding.ActivityMainBinding
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var addBtn: ImageButton
     private lateinit var myListView: ListView
+    private lateinit var clickedList: String
+    private var mapOfAllLists= mutableMapOf<String, ArrayList<Word>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,14 +51,13 @@ class MainActivity : AppCompatActivity() {
         val romaji3 = arrayOf("semai","sukunai", "takai")
         val definitions3 = arrayOf("Narrow", "Few", "Tall")
 
-        data class Value(val words: Array<String>,val hiraganas: Array<String>,val romajis: Array<String>, val defs: Array<String>)
+        var wordlist1 = createData(words1,hiragana1,romaji1,definitions1)
+        var wordlist2 = createData(words2,hiragana2,romaji2,definitions2)
+        var wordlist3 = createData(words3,hiragana3,romaji3,definitions3)
 
-        val key1 = "Verbs"
-        val wordndef1 = Value(words1,hiragana1,romaji1, definitions1)
-        val key2 = "Nouns"
-        val wordndef2 = Value(words2,hiragana2,romaji2, definitions2)
-        val key3 = "Adjectives"
-        val wordndef3 = Value(words3,hiragana3,romaji3, definitions3)
+        mapOfAllLists[listOfLists[0]] = wordlist1
+        mapOfAllLists[listOfLists[1]] = wordlist2
+        mapOfAllLists[listOfLists[2]] = wordlist3
 
         val numWords1 = words1.size
         val numWords2 = words2.size
@@ -68,32 +74,32 @@ class MainActivity : AppCompatActivity() {
         val adapterMiddle = ListAdapter(this,arrayOfListInfo)
         binding.lvListOfLists.adapter = adapterMiddle
 
-        val mapOfAllLists = mutableMapOf<String, Value>()
-        //key is name of list, and wordndef holds arrays of both words and defs
-        mapOfAllLists[key1] = wordndef1
-        mapOfAllLists[key2] = wordndef2
-        mapOfAllLists[key3] = wordndef3
-
-        println(mapOfAllLists)
+        val startForResult = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                var myResult = result.data!!.extras?.getString("result")
+                updateList(myResult)
+            }
+        }
 
         myListView.setOnItemClickListener { parent, view, position, id ->
             Toast.makeText(this, "item clicked", Toast.LENGTH_SHORT).show()
             val nameOfSelected = view.findViewById<TextView>(R.id.tvListName)
+            clickedList = nameOfSelected.text.toString()
+
+            var gson = Gson()
             val intent = Intent(this,ListActivity::class.java)
             if (nameOfSelected.text == "new list"){
-                val rando = arrayOf<String>()
-                intent.putExtra("wordList", rando)
-                intent.putExtra("hiraganaList", rando)
-                intent.putExtra("romajiList", rando)
-                intent.putExtra("defList", rando)
+                val rando = ArrayList<Word>()
+                val json: String = gson.toJson(rando)
+                intent.putExtra("mainList", json)
             }
             else {
-                intent.putExtra("wordList", mapOfAllLists[nameOfSelected.text]!!.words)
-                intent.putExtra("hiraganaList", mapOfAllLists[nameOfSelected.text]!!.hiraganas)
-                intent.putExtra("romajiList", mapOfAllLists[nameOfSelected.text]!!.romajis)
-                intent.putExtra("defList", mapOfAllLists[nameOfSelected.text]!!.defs)
+                val json: String = gson.toJson(mapOfAllLists[nameOfSelected.text])
+                intent.putExtra("mainList", json)
             }
-            startActivity(intent)
+            startForResult.launch(intent)
             Animatoo.animateSlideLeft(this)
         }
 
@@ -103,7 +109,26 @@ class MainActivity : AppCompatActivity() {
             adapterMiddle.notifyDataSetChanged()
         }
     }
+
+    private fun updateList(myResult: String?){
+        var gson = Gson()
+        val newArray = object : TypeToken<ArrayList<Word>>() {}.type
+        var wordArray: ArrayList<Word> = gson.fromJson(myResult, newArray)
+
+        mapOfAllLists[clickedList] = wordArray
+    }
+
+    private fun createData(words: Array<String>, hiraganas: Array<String>,romajis: Array<String>,definitions: Array<String>,) : ArrayList<Word>{
+        var wordList= ArrayList<Word>()
+        for(i in 0 until words.size){
+            val unit = Word(words[i], hiraganas[i], romajis[i], definitions[i])
+            wordList.add(unit)
+        }
+        return wordList
+    }
+
 }
 
 //icon credits to pngegg, icons8
 //cats profile pics credit to  @cadmium_red on Freepik
+//books icon credit to iconsDB
