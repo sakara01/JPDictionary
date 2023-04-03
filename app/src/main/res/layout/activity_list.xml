@@ -12,47 +12,267 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:src="@drawable/back"
-        app:tint="?attr/blueElements"
+        app:tint="?attr/blueVariant"
         android:scaleX="1.2"
         android:scaleY="1.2"
         android:background="@null"
+        android:contentDescription="back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/etListName"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="?attr/blueElements"
-        android:ems="10"
+        android:layout_height="48dp"
+        android:layout_marginTop="6dp"
+        android:backgroundTint="?attr/blueVariant"
         android:fontFamily="monospace"
-        android:hint="Enter List Name"
+        android:hint=" Enter List Name "
         android:textAlignment="center"
         android:inputType="textPersonName"
         android:textColorHint="?attr/greyOut"
         android:textColor="?attr/texts"
-        android:textSize="22sp"
+        android:textSize="18sp"
+        android:alpha="0.8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:importantForAutofill="no" />
 
     <ListView
         android:id="@+id/lvWordList"
-        android:layout_width="391dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etListName"
         tools:listitem="@layout/word_item"/>
 
+    <FrameLayout
+        android:id="@+id/frame1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:layout_marginBottom="6dp"
+        app:layout_constraintBottom_toTopOf="@+id/cardView"
+        app:layout_constraintStart_toStartOf="parent">
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnHideWord"
+        android:layout_width="58dp"
+        android:layout_height="52dp"
+        android:backgroundTint="?attr/texts"
+        app:cornerRadius="7dp"
+        android:contentDescription="hide Kanji/Hiragana text"
+        />
+
+        <TextView
+            android:id="@+id/JPtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/appBackground"
+            android:fontFamily="monospace"
+            android:text=" JP "
+            android:textSize="18sp"
+            android:translationZ="20dp"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:id="@+id/JPrule"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:translationZ="0dp"
+            android:src="@drawable/line"
+            android:scaleX="2.4"
+            android:scaleY="2"
+            app:tint="?attr/appBackground"
+            android:layout_gravity="center"
+            android:contentDescription="JP strikethrough"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/frame2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="6dp"
+        app:layout_constraintBottom_toTopOf="@+id/cardView"
+        app:layout_constraintStart_toEndOf="@id/frame1">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnHideDef"
+            android:layout_width="58dp"
+            android:layout_height="52dp"
+            android:backgroundTint="?attr/blue"
+            app:cornerRadius="7dp"
+            android:contentDescription="Hide Definitions"
+            />
+
+        <TextView
+            android:id="@+id/ENtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/appBackground"
+            android:fontFamily="monospace"
+            android:text=" EN "
+            android:textSize="18sp"
+            android:translationZ="20dp"
+            android:layout_gravity="center"
+            />
+
+        <ImageView
+            android:id="@+id/ENrule"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:translationZ="0dp"
+            android:src="@drawable/line"
+            android:scaleX="2.4"
+            android:scaleY="2"
+            app:tint="?attr/appBackground"
+            android:layout_gravity="center"
+            android:contentDescription="EN strikethrough"/>
+
+    </FrameLayout>
+
+
+    <ImageButton
+        android:id="@+id/btnAdd"
+        android:layout_width="68dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="9dp"
+        android:background="@drawable/roundbutton"
+        android:backgroundTint="?attr/buttons"
+        android:src="@drawable/plus"
+        app:layout_constraintBottom_toTopOf="@+id/cardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white"
+        android:contentDescription="Add words to list"
+        />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
+        android:backgroundTint="?attr/cardback"
+        app:cardElevation="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        >
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:baselineAligned="false">
+
+              <androidx.constraintlayout.widget.ConstraintLayout
+                  android:id="@+id/constraint1"
+                  android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:layout_height="match_parent"
+                  android:background="@drawable/border">
+
+                  <ImageView
+                      android:layout_width="0px"
+                      android:layout_height="0px"
+                      android:src="@mipmap/books"
+                      android:scaleX="1"
+                      android:scaleY="1.2"
+                      app:tint="?attr/texts"
+                      android:layout_marginTop="12dp"
+                      app:layout_constraintBottom_toTopOf="@+id/tvView"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toStartOf="parent"
+                      app:layout_constraintTop_toTopOf="parent"
+                      android:contentDescription="books"/>
+
+                  <TextView
+                      android:id="@+id/tvView"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginBottom="7dp"
+                      android:fontFamily="monospace"
+                      android:text="List"
+                      android:textColor="?attr/texts"
+                      app:layout_constraintBottom_toBottomOf="parent"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toStartOf="parent" />
+
+              </androidx.constraintlayout.widget.ConstraintLayout>
+              <androidx.constraintlayout.widget.ConstraintLayout
+                  android:id="@+id/constraint2"
+                  android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:layout_height="match_parent">
+
+                  <ImageView
+                      android:layout_width="0px"
+                      android:layout_height="0px"
+                      android:src="@mipmap/flashcards"
+                      app:tint="?attr/texts"
+                      android:layout_marginTop="11dp"
+                      app:layout_constraintBottom_toTopOf="@+id/tvFlashcards"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toStartOf="parent"
+                      app:layout_constraintTop_toTopOf="parent"
+                      android:contentDescription="flashcards"/>
+
+                  <TextView
+                      android:id="@+id/tvFlashcards"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginBottom="7dp"
+                      android:fontFamily="monospace"
+                      android:text="Flashcards"
+                      android:textColor="?attr/texts"
+                      app:layout_constraintBottom_toBottomOf="parent"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toStartOf="parent" />
+
+              </androidx.constraintlayout.widget.ConstraintLayout>
+              <androidx.constraintlayout.widget.ConstraintLayout
+                  android:id="@+id/constraint3"
+                  android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:layout_height="match_parent">
+
+                  <ImageView
+                      android:layout_width="0px"
+                      android:layout_height="0px"
+                      android:src="@mipmap/test"
+                      app:tint="?attr/texts"
+                      android:layout_marginTop="10dp"
+                      android:layout_marginBottom="1dp"
+                      android:layout_marginStart="2dp"
+                      app:layout_constraintBottom_toTopOf="@+id/tvTest"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toStartOf="parent"
+                      app:layout_constraintTop_toTopOf="parent"
+                      android:contentDescription="test"/>
+
+                  <TextView
+                      android:id="@+id/tvTest"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginBottom="7dp"
+                      android:fontFamily="monospace"
+                      android:text="Test"
+                      android:textColor="?attr/texts"
+                      app:layout_constraintBottom_toBottomOf="parent"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toStartOf="parent" />
+
+              </androidx.constraintlayout.widget.ConstraintLayout>
+
+          </LinearLayout>
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

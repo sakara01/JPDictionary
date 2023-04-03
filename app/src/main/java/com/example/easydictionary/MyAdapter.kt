@@ -10,20 +10,38 @@ import android.widget.TextView
 class MyAdapter(private val context: Activity, private val arrayList: ArrayList<Word>): ArrayAdapter<Word>(context,
                 R.layout.word_item, arrayList) {
 
+    private lateinit var num: TextView
+    private lateinit var word: TextView
+    private lateinit var hiragana: TextView
+    private lateinit var definition: TextView
+    private lateinit var view: View
+    private lateinit var inflater: LayoutInflater
+    private lateinit var tvOpen: TextView
+    private lateinit var tvClose: TextView
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
-        val inflater: LayoutInflater = LayoutInflater.from(context)
-        val view: View = inflater.inflate(R.layout.word_item, null)
+        inflater = LayoutInflater.from(context)
+        view= inflater.inflate(R.layout.word_item, null)
 
-        val num: TextView = view.findViewById(R.id.tvNumber)
-        val word: TextView = view.findViewById(R.id.tvWord)
-        val definition: TextView = view.findViewById(R.id.tvDef)
+        num = view.findViewById(R.id.tvNumber)
+        word= view.findViewById(R.id.tvWord)
+        hiragana= view.findViewById(R.id.tvHiragana)
+        definition= view.findViewById(R.id.tvDef)
+        tvOpen = view.findViewById(R.id.tvOpen)
+        tvClose = view.findViewById(R.id.tvClose)
 
-        num.text = (position + 1).toString() +"."
+        num.text =  (position + 1).toString() +"."
         word.text = arrayList[position].name
+        hiragana.text = arrayList[position].hiragana
         definition.text = arrayList[position].definition
 
+        if (word.text == ""){
+            tvOpen.text = ""
+            tvClose.text = ""
+        }
 
         return view
     }
+
 }

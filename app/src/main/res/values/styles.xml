@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Light" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Light" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="appBackground">#F1F1F1</item>
         <item name="cardback">#FFFFFF</item>
         <item name="texts">#151515</item>
+        <item name="textsGreyed">#272727</item>
         <item name="buttons">#002265</item>
-        <item name="listitems">#7596CD</item>
-        <item name="blueText">#113573</item>
-        <item name="blueElements">#1B51AC</item>
+        <item name="listitems">#DEE9FB</item>
+        <item name="blue">#113573</item>
+        <item name="blueVariant">#1B51AC</item>
         <item name="greyOut">#676767</item>
 
     </style>
 
-    <style name="Dark" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Dark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="appBackground">#2B2A2A</item>
-        <item name="cardback">#3E3E3E</item>
-        <item name="texts">#F6F6F6</item>
+        <item name="cardback">#303030</item>
+        <item name="texts">#E3E3E3</item>
+        <item name="textsGreyed">#D3D3D3</item>
         <item name="buttons">#274E91</item>
         <item name="listitems">#232F47</item>
-        <item name="blueText">#5A80C2</item>
-        <item name="blueElements">#507ECC</item>
+        <item name="blue">#6B98E6</item>
+        <item name="blueVariant">#507ECC</item>
         <item name="greyOut">#B5B5B5</item>
 
 

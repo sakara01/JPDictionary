@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/appBackground"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tvNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1."
+        android:fontFamily="monospace"
+        android:textColor="?attr/textsGreyed"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/tvKanji"
+        />
+
+    <TextView
+        android:id="@+id/tvKanji"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="先生"
+        android:textSize="18sp"
+        android:textColor="?attr/texts"
+        android:fontFamily="monospace"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="40dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvOpen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginBottom="2dp"
+        android:text="["
+        android:textColor="?attr/textsGreyed"
+        android:textSize="24sp"
+        android:fontFamily="monospace"
+        app:layout_constraintBottom_toBottomOf="@+id/tvKanji"
+        app:layout_constraintStart_toEndOf="@+id/tvKanji"
+        app:layout_constraintTop_toTopOf="@+id/tvKanji" />
+
+    <TextView
+        android:id="@+id/tvHiragana"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="せんせい"
+        android:textColor="?attr/textsGreyed"
+        android:textSize="16sp"
+        android:fontFamily="monospace"
+        app:layout_constraintTop_toTopOf="@id/tvOpen"
+        app:layout_constraintBottom_toBottomOf="@id/tvOpen"
+        app:layout_constraintStart_toEndOf="@id/tvOpen"/>
+
+    <TextView
+        android:id="@+id/tvClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:text="]"
+        android:textColor="?attr/textsGreyed"
+        android:textSize="24sp"
+        android:fontFamily="monospace"
+        app:layout_constraintBottom_toBottomOf="@+id/tvOpen"
+        app:layout_constraintStart_toEndOf="@+id/tvHiragana"
+        app:layout_constraintTop_toTopOf="@+id/tvOpen" />
+
+    <TextView
+        android:id="@+id/tvRomaji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="sensei"
+        android:textSize="12sp"
+        android:textColor="?attr/greyOut"
+        android:layout_marginTop="11dp"
+        android:fontFamily="monospace"
+        app:layout_constraintStart_toStartOf="@id/tvKanji"
+        app:layout_constraintTop_toBottomOf="@id/tvKanji"
+        />
+
+    <TextView
+        android:id="@+id/tvDef"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.85"
+        android:text="teacher, instructor, mentor"
+        android:fontFamily="monospace"
+        android:textSize="14sp"
+        android:textColor="?attr/blue"
+        android:layout_marginTop="16dp"
+        android:paddingBottom="22dp"
+        app:layout_constraintStart_toStartOf="@id/tvKanji"
+        app:layout_constraintTop_toBottomOf="@id/tvRomaji"/>
+
+    <FrameLayout
+        android:id="@+id/btnAdd"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/roundbutton"
+            android:backgroundTint="?attr/blue"
+            android:src="@drawable/plus"
+            app:tint="?attr/appBackground"
+            android:contentDescription="add to list"/>
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

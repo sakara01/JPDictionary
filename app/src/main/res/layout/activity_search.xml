@@ -4,65 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".SearchActivity"
     android:background="?attr/appBackground">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
-        android:text="Hello Bekie,"
-        android:textSize="21sp"
-        android:textColor="?attr/texts"
-        android:fontFamily="monospace"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvSubTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="What are you learning today?"
-        android:textColor="?attr/blue"
-        android:fontFamily="monospace"
-        android:layout_marginTop="4dp"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        app:layout_constraintStart_toStartOf="@id/tvTitle"/>
-
-    <FrameLayout
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvSubTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvTitle">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:contentDescription="profile image"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/cats6" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/search_border" />
-    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/searchBar"
         android:layout_width="match_parent"
-        android:layout_height="53dp"
-        android:layout_marginTop="28dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSubTitle"
+        app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/search_border"
         >
 
@@ -78,12 +33,11 @@
                 android:scaleX="1.2"
                 android:scaleY="1.2"
                 android:paddingStart="6dp"
-                android:paddingEnd="6dp"
                 app:tint="?attr/greyOut"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/search"
-                android:contentDescription="search icon"/>
+                android:src="@drawable/back"
+                android:contentDescription="back"/>
 
             <HorizontalScrollView
                 android:layout_width="0dp"
@@ -98,9 +52,9 @@
                     android:id="@+id/etInput"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:hint="Search for any List"
+                    android:hint="せんせい, sensei, teacher   "
                     android:textColorHint="?attr/greyOut"
-                    android:alpha="0.95"
+                    android:alpha="0.8"
                     android:paddingTop="14dp"
                     android:paddingBottom="14dp"
                     android:textSize="16sp"
@@ -151,33 +105,47 @@
 
     </FrameLayout>
 
-
     <ListView
-        android:id="@+id/lvListOfLists"
-        android:layout_width="409dp"
+        android:id="@+id/lvResultsList"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:backgroundTint="?attr/appBackground"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/searchBar"
-        app:layout_constraintBottom_toTopOf="@+id/btnAdd"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/list_item"/>
+        app:layout_constraintTop_toBottomOf="@id/searchBar"
+        tools:listitem="@layout/search_result">
 
-    <ImageButton
-        android:id="@+id/btnAdd"
-        android:layout_width="68dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="20dp"
+    </ListView>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/roundbutton"
-        android:backgroundTint="?attr/buttons"
-        android:src="@drawable/plus"
-        app:tint="@color/white"
+        android:fontFamily="monospace"
+        android:text="Tap to see more definitions and example sentences ^"
+        android:textAlignment="center"
+        android:textColor="?attr/greyOut"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="add new list"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.9" />
+    <!--
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:layout_marginTop="520dp"
+        app:layout_constraintTop_toBottomOf="@id/searchBar">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
