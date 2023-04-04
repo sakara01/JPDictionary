@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 
 class SearchAdapter(private val context: Activity, private val arrayList: ArrayList<Word>): ArrayAdapter<Word>(context,
@@ -44,7 +45,6 @@ class SearchAdapter(private val context: Activity, private val arrayList: ArrayL
 
         if (position == 0){
             counter = 0
-            println("counter set to 0")
         }
 
         addBtn.setTag(counter)

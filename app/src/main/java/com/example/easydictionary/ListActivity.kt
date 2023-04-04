@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,8 @@ import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.example.easydictionary.databinding.ActivityListBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ListActivity : AppCompatActivity() {
@@ -33,14 +36,18 @@ class ListActivity : AppCompatActivity() {
     private lateinit var constraint2: View
     private lateinit var constraint3: View
     private var mainListStr: String? = null
+    private lateinit var copyList: ArrayList<Word>
+
+    /*
     private var words: Array<String>? = null
     private var hiraganas: Array<String>? = null
     private var romajis: Array<String>? = null
     private var definitions: Array<String>? = null
+    */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.Light)
+        setTheme(R.style.Dark)
         window.statusBarColor = ContextCompat.getColor(this, R.color.grey)
         binding = ActivityListBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -49,6 +56,7 @@ class ListActivity : AppCompatActivity() {
         var gson = Gson()
         val newArray = object : TypeToken<ArrayList<Word>>() {}.type
         wordList = gson.fromJson(mainListStr, newArray)
+        copyList = gson.fromJson(mainListStr, newArray)
 
 
         backBtn = findViewById(R.id.btnBack)
@@ -65,21 +73,14 @@ class ListActivity : AppCompatActivity() {
         buttonClick.repeatMode = 2
         buttonClick.repeatCount = 1
 
-        //wordList = ArrayList()
-
-        /*
-        for(i in words!!.indices){
-            val unit = Word(words!![i], hiraganas!![i], romajis!![i], definitions!![i])
-            wordList.add(unit)
-        }
-        */
-
         val adapterMiddle = MyAdapter(this,wordList)
         binding.lvWordList.adapter = adapterMiddle
 
         backBtn.setOnClickListener{
             val intent = Intent()
             val gson = Gson()
+            showAllWords()
+            showAllDefs()
             val json: String = gson.toJson(wordList)
             intent.putExtra("result", json) //pass intent extra here
             setResult(RESULT_OK, intent)
@@ -133,7 +134,6 @@ class ListActivity : AppCompatActivity() {
 
         btnAdd.setOnClickListener {
             btnAdd.startAnimation(buttonClick)
-            btnAdd.startAnimation(buttonClick)
             startForResult.launch(Intent(this, SearchActivity::class.java))
             Animatoo.animateSlideLeft(this)
         }
@@ -156,40 +156,42 @@ class ListActivity : AppCompatActivity() {
     }
 
 
-
     private fun hideAllWords(){
-        for(i in words!!.indices){
+        for(i in 0 until wordList.size){
             wordList[i].name = ""
             wordList[i].hiragana = ""
         }
+
+
     }
     private fun showAllWords(){
-        for(i in words!!.indices){
-            wordList[i].name = words!![i]
-            wordList[i].hiragana = hiraganas!![i]
+        for(i in 0 until wordList.size){
+            wordList[i].name= copyList[i].name
+            wordList[i].hiragana= copyList[i].hiragana
         }
     }
     private fun hideAllDefs(){
-        for(i in definitions!!.indices){
+        for(i in 0 until wordList.size){
             wordList[i].definition = ""
         }
     }
 
     private fun showAllDefs(){
-        for(i in definitions!!.indices){
-            wordList[i].definition = definitions!![i]
+        for(i in 0 until wordList.size){
+            wordList[i].definition = copyList[i].definition
         }
     }
 
     private fun updateList(myResult:String?){
         var gson = Gson()
-        val newArray = object : TypeToken<Array<Word>>() {}.type
-        var wordArray: Array<Word> = gson.fromJson(myResult, newArray)
-
-        for (i in 0 until wordArray.size)
-            wordList.add(wordArray[i])
+        val newArray = object : TypeToken<ArrayList<Word>>() {}.type
+        var wordArray: ArrayList<Word> = gson.fromJson(myResult, newArray)
+        var newWord: Word
+        for (i in 0 until wordArray.size) {
+            newWord = wordArray[i]
+            wordList.add(newWord)
+            copyList.add(newWord.copy())
+        }
     }
-
-
 
 }

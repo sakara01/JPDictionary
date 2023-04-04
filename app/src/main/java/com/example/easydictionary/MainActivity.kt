@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.Light)
+        setTheme(R.style.Dark)
         window.statusBarColor = ContextCompat.getColor(this, R.color.grey)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

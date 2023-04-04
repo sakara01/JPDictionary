@@ -38,7 +38,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.Light)
+        setTheme(R.style.Dark)
         window.statusBarColor = ContextCompat.getColor(this, R.color.grey)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -179,6 +179,7 @@ class SearchActivity : AppCompatActivity() {
     fun testfun(pos: Int){
         addedWord = wordList[pos]
         addedList.add(addedWord)
+        println("testfun: " + addedList)
     }
 
 }

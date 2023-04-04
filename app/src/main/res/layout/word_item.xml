@@ -22,14 +22,15 @@
 
     <TextView
         android:id="@+id/tvDef"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        app:layout_constraintWidth_percent="0.8"
+        android:layout_marginTop="14dp"
         android:fontFamily="monospace"
         android:paddingBottom="16dp"
         android:text="Example definition of word."
         android:textColor="?attr/blue"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/tvWord"
         app:layout_constraintTop_toBottomOf="@+id/tvWord" />
 
