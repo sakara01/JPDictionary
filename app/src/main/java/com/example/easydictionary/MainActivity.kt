@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var myListView: ListView
     private lateinit var clickedList: String
     private var mapOfAllLists= mutableMapOf<String, ArrayList<Word>>()
+    private lateinit var arrayOfListInfo: ArrayList<ListData>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,23 +52,14 @@ class MainActivity : AppCompatActivity() {
         val romaji3 = arrayOf("semai","sukunai", "takai")
         val definitions3 = arrayOf("Narrow", "Few", "Tall")
 
-        var wordlist1 = createData(words1,hiragana1,romaji1,definitions1)
-        var wordlist2 = createData(words2,hiragana2,romaji2,definitions2)
-        var wordlist3 = createData(words3,hiragana3,romaji3,definitions3)
+        mapOfAllLists[listOfLists[0]] = createData(words1,hiragana1,romaji1,definitions1)
+        mapOfAllLists[listOfLists[1]] = createData(words2,hiragana2,romaji2,definitions2)
+        mapOfAllLists[listOfLists[2]] = createData(words3,hiragana3,romaji3,definitions3)
 
-        mapOfAllLists[listOfLists[0]] = wordlist1
-        mapOfAllLists[listOfLists[1]] = wordlist2
-        mapOfAllLists[listOfLists[2]] = wordlist3
-
-        val numWords1 = words1.size
-        val numWords2 = words2.size
-        val numWords3 = words3.size
-        val numWords = arrayOf(numWords1,numWords2, numWords3)
-
-        val arrayOfListInfo = ArrayList<ListData>()
+        arrayOfListInfo = ArrayList()
 
         for(i in listOfLists.indices){
-            val unit = ListData(listOfLists[i], numWords[i])
+            val unit = ListData(listOfLists[i], mapOfAllLists[listOfLists[i]]!!.size)
             arrayOfListInfo.add(unit)
         }
 
@@ -80,6 +72,7 @@ class MainActivity : AppCompatActivity() {
             if (result.resultCode == Activity.RESULT_OK) {
                 var myResult = result.data!!.extras?.getString("result")
                 updateList(myResult)
+                adapterMiddle.notifyDataSetChanged()
             }
         }
 
@@ -90,15 +83,10 @@ class MainActivity : AppCompatActivity() {
 
             var gson = Gson()
             val intent = Intent(this,ListActivity::class.java)
-            if (nameOfSelected.text == "new list"){
-                val rando = ArrayList<Word>()
-                val json: String = gson.toJson(rando)
-                intent.putExtra("mainList", json)
-            }
-            else {
-                val json: String = gson.toJson(mapOfAllLists[nameOfSelected.text])
-                intent.putExtra("mainList", json)
-            }
+
+            val json: String = gson.toJson(mapOfAllLists[nameOfSelected.text])
+            intent.putExtra("mainList", json)
+
             startForResult.launch(intent)
             Animatoo.animateSlideLeft(this)
         }
@@ -106,6 +94,7 @@ class MainActivity : AppCompatActivity() {
         addBtn.setOnClickListener{
             val unit = ListData("new list", 0)
             arrayOfListInfo.add(unit)
+            mapOfAllLists["new list"] = ArrayList<Word>()
             adapterMiddle.notifyDataSetChanged()
         }
     }
@@ -114,8 +103,12 @@ class MainActivity : AppCompatActivity() {
         var gson = Gson()
         val newArray = object : TypeToken<ArrayList<Word>>() {}.type
         var wordArray: ArrayList<Word> = gson.fromJson(myResult, newArray)
-
         mapOfAllLists[clickedList] = wordArray
+        for (i in 0 until arrayOfListInfo.size) {
+            if (arrayOfListInfo[i].listName == clickedList){
+                arrayOfListInfo[i].numWords = mapOfAllLists[clickedList]!!.size
+            }
+        }
     }
 
     private fun createData(words: Array<String>, hiraganas: Array<String>,romajis: Array<String>,definitions: Array<String>,) : ArrayList<Word>{
