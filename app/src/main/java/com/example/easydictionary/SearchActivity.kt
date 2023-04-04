@@ -1,9 +1,11 @@
 package com.example.easydictionary
 
 import android.content.Intent
+import android.media.Image
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.view.animation.AlphaAnimation
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -180,6 +182,22 @@ class SearchActivity : AppCompatActivity() {
         addedWord = wordList[pos]
         addedList.add(addedWord)
         println("testfun: " + addedList)
+    }
+
+    fun setImage(pos: Int, isClicked: Boolean) {
+        var firstListItemPosition: Int = lvResultsList.getFirstVisiblePosition();
+        var lastListItemPosition: Int = firstListItemPosition + lvResultsList.getChildCount() - 1;
+        var view: View
+        if (pos < firstListItemPosition || pos > lastListItemPosition ) {
+            view = lvResultsList.getAdapter().getView(pos, null, lvResultsList);
+        } else {
+            var childIndex = pos - firstListItemPosition;
+            view = lvResultsList.getChildAt(childIndex);
+        }
+        var img = view.findViewById<ImageView>(R.id.imgAdd)
+
+        if (isClicked){ img.setImageResource(R.drawable.check)}
+        else {img.setImageResource(R.drawable.plus)}
     }
 
 }

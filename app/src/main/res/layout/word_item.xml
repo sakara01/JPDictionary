@@ -51,24 +51,24 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            app:backgroundTint="?attr/blueVariant"
-            app:cornerRadius="10dp"
-            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
         <ImageView
-            android:layout_width="34dp"
+            android:layout_width="36dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:backgroundTint="?attr/blue"
+            android:background="@drawable/roundbutton2"/>
+
+        <ImageView
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:src="@drawable/speak"
             app:tint="?attr/appBackground"
             android:layout_gravity="center"
-            android:translationZ="10dp"
+            android:translationZ="2dp"
             android:contentDescription="speak word"/>
     </FrameLayout>
 
