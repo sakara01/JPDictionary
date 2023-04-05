@@ -37,6 +37,7 @@ class ListActivity : AppCompatActivity() {
     private lateinit var constraint3: View
     private var mainListStr: String? = null
     private lateinit var copyList: ArrayList<Word>
+    private lateinit var theme: String
 
     /*
     private var words: Array<String>? = null
@@ -47,7 +48,11 @@ class ListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.Dark)
+
+        theme = intent.extras?.getString("theme").toString()
+        if (theme == "Dark"){setTheme(R.style.Dark) }
+        else {setTheme(R.style.Light)}
+
         window.statusBarColor = ContextCompat.getColor(this, R.color.grey)
         binding = ActivityListBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -134,7 +139,10 @@ class ListActivity : AppCompatActivity() {
 
         btnAdd.setOnClickListener {
             btnAdd.startAnimation(buttonClick)
-            startForResult.launch(Intent(this, SearchActivity::class.java))
+            val intent = Intent(this,SearchActivity::class.java)
+            if (theme == "Dark"){intent.putExtra("theme","Dark")}
+            else (intent.putExtra("theme", "Light"))
+            startForResult.launch(intent)
             Animatoo.animateSlideLeft(this)
         }
 

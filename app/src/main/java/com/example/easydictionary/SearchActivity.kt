@@ -36,11 +36,15 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var lvResultsList: ListView
     private lateinit var addedWord: Word
     private lateinit var addedList: ArrayList<Word>
-
+    private lateinit var theme: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.Dark)
+
+        theme = intent.extras?.getString("theme").toString()
+        if (theme == "Dark"){setTheme(R.style.Dark) }
+        else {setTheme(R.style.Light)}
+
         window.statusBarColor = ContextCompat.getColor(this, R.color.grey)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -1,12 +1,10 @@
 package com.example.easydictionary
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageButton
-import android.widget.ListView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +13,7 @@ import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.example.easydictionary.databinding.ActivityMainBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.io.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,18 +23,29 @@ class MainActivity : AppCompatActivity() {
     private lateinit var clickedList: String
     private var mapOfAllLists= mutableMapOf<String, ArrayList<Word>>()
     private lateinit var arrayOfListInfo: ArrayList<ListData>
+    private lateinit var theme: String
+    private lateinit var profile: FrameLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        theme = intent.extras?.getString("theme").toString()
+        if (theme == "null"){theme ="Light" }
+
+        println("theme is : "+theme)
+        if (theme == "Dark"){setTheme(R.style.Dark) }
+        else {setTheme(R.style.Light)}
+
         super.onCreate(savedInstanceState)
-        setTheme(R.style.Dark)
+
         window.statusBarColor = ContextCompat.getColor(this, R.color.grey)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         addBtn = findViewById(R.id.btnAdd)
         myListView= findViewById(R.id.lvListOfLists)
+        profile = findViewById(R.id.profile)
 
         val listOfLists = mutableListOf("Verbs","Nouns","Adjectives")
+
 
         val words1 = arrayOf("寝る", "走る","食べる")
         val hiragana1 = arrayOf("ねる", "はしる","たべる")
@@ -63,6 +73,11 @@ class MainActivity : AppCompatActivity() {
             arrayOfListInfo.add(unit)
         }
 
+        checkFile()
+
+        println(mapOfAllLists)
+        println(arrayOfListInfo)
+
         val adapterMiddle = ListAdapter(this,arrayOfListInfo)
         binding.lvListOfLists.adapter = adapterMiddle
 
@@ -86,6 +101,7 @@ class MainActivity : AppCompatActivity() {
 
             val json: String = gson.toJson(mapOfAllLists[nameOfSelected.text])
             intent.putExtra("mainList", json)
+            intent.putExtra("theme",theme)
 
             startForResult.launch(intent)
             Animatoo.animateSlideLeft(this)
@@ -96,6 +112,18 @@ class MainActivity : AppCompatActivity() {
             arrayOfListInfo.add(unit)
             mapOfAllLists["new list"] = ArrayList<Word>()
             adapterMiddle.notifyDataSetChanged()
+        }
+
+        profile.setOnClickListener{
+            println("profile clicked")
+            val intent = Intent(this, MainActivity::class.java)
+            if (theme == "Light"){
+                (intent.putExtra("theme", "Dark"))
+            } else {
+                (intent.putExtra("theme", "Light"))
+            }
+            startActivity(intent)
+            finish()
         }
     }
 
@@ -111,13 +139,57 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun createData(words: Array<String>, hiraganas: Array<String>,romajis: Array<String>,definitions: Array<String>,) : ArrayList<Word>{
+    private fun createData(
+        words: Array<String>,
+        hiraganas: Array<String>,
+        romajis: Array<String>,
+        definitions: Array<String>
+    ) : ArrayList<Word>{
         var wordList= ArrayList<Word>()
         for(i in 0 until words.size){
             val unit = Word(words[i], hiraganas[i], romajis[i], definitions[i])
             wordList.add(unit)
         }
         return wordList
+    }
+
+    private fun checkFile(){
+        val fileName = "data.txt"
+        val file = File(this@MainActivity.filesDir, "data.txt")
+        if (file.exists()) {
+            println("file exists")
+            var fileInputStream: FileInputStream? = null
+            fileInputStream = openFileInput(fileName)
+            var inputStreamReader = InputStreamReader(fileInputStream)
+            val bufferedReader = BufferedReader(inputStreamReader)
+            val stringBuilder: StringBuilder = StringBuilder()
+            var text: String? = null
+            while (run {
+                    text = bufferedReader.readLine()
+                    text
+                } != null) {
+                stringBuilder.append(text)
+            }
+            println("read data is: " + (stringBuilder.toString()))
+        }
+        else {
+            var mapStr = "{Verbs=[Word(name=寝る, hiragana=ねる, romaji=neru, definition=To sleep), Word(name=走る, hiragana=はしる, romaji=hashiru, definition=To run), Word(name=食べる, hiragana=たべる, romaji=taberu, definition=To eat)], Nouns=[Word(name=家族, hiragana=かぞく, romaji=kazoku, definition=Family), Word(name=世界, hiragana=せかい, romaji=sekai, definition=World), Word(name=お店, hiragana=おみせ, romaji=omise, definition=Shop)], Adjectives=[Word(name=狭い, hiragana=せまい, romaji=semai, definition=Narrow), Word(name=少ない, hiragana=すくない, romaji=sukunai, definition=Few), Word(name=高い, hiragana=たかい, romaji=takai, definition=Tall)]}"
+            val fileOutputStream: FileOutputStream
+            try {
+                fileOutputStream = openFileOutput(fileName, Context.MODE_PRIVATE)
+                fileOutputStream.write(mapStr.toByteArray())
+                println("file Written")
+            } catch (e: FileNotFoundException){
+                e.printStackTrace()
+            }catch (e: NumberFormatException){
+                e.printStackTrace()
+            }catch (e: IOException){
+                e.printStackTrace()
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+
     }
 
 }
