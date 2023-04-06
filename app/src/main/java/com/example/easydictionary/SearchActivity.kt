@@ -185,7 +185,7 @@ class SearchActivity : AppCompatActivity() {
     fun testfun(pos: Int){
         addedWord = wordList[pos]
         addedList.add(addedWord)
-        println("testfun: " + addedList)
+        //println("testfun: " + addedList)
     }
 
     fun setImage(pos: Int, isClicked: Boolean) {

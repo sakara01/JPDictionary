@@ -57,17 +57,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="13dp"
-        android:layout_marginBottom="6dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintStart_toStartOf="parent">
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnHideWord"
-        android:layout_width="58dp"
-        android:layout_height="52dp"
-        android:backgroundTint="?attr/texts"
-        app:cornerRadius="7dp"
-        android:contentDescription="hide Kanji/Hiragana text"
-        />
+        <ImageView
+            android:id="@+id/btnHideWord"
+            android:layout_width="54dp"
+            android:layout_height="44dp"
+            android:translationZ="10dp"
+            android:background="@drawable/roundbutton2"
+            android:backgroundTint="?attr/texts"
+            android:contentDescription="hide Kanji/Hiragana text"
+            />
 
         <TextView
             android:id="@+id/JPtext"
@@ -99,15 +100,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
-        android:layout_marginBottom="6dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintStart_toEndOf="@id/frame1">
-        <com.google.android.material.button.MaterialButton
+        <ImageView
             android:id="@+id/btnHideDef"
-            android:layout_width="58dp"
-            android:layout_height="52dp"
+            android:layout_width="54dp"
+            android:layout_height="44dp"
+            android:translationZ="10dp"
             android:backgroundTint="?attr/blue"
-            app:cornerRadius="7dp"
+            android:background="@drawable/roundbutton2"
             android:contentDescription="Hide Definitions"
             />
 

@@ -26,8 +26,8 @@ class ListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityListBinding
     private lateinit var wordList: ArrayList<Word>
     private lateinit var backBtn : ImageButton
-    private lateinit var btnHideWord : Button
-    private lateinit var btnHideDef : Button
+    private lateinit var btnHideWord : ImageView
+    private lateinit var btnHideDef : ImageView
     private lateinit var btnAdd : ImageButton
     private lateinit var listName: EditText
     private var hideWordClicked: Boolean = false

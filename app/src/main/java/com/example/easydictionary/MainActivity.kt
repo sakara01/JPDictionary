@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.example.easydictionary.databinding.ActivityMainBinding
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import java.io.*
 
@@ -25,12 +26,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var arrayOfListInfo: ArrayList<ListData>
     private lateinit var theme: String
     private lateinit var profile: FrameLayout
+    private val fileName = "data.txt"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         theme = intent.extras?.getString("theme").toString()
         if (theme == "null"){theme ="Light" }
 
-        println("theme is : "+theme)
         if (theme == "Dark"){setTheme(R.style.Dark) }
         else {setTheme(R.style.Light)}
 
@@ -40,31 +41,14 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        getMap()
+
         addBtn = findViewById(R.id.btnAdd)
         myListView= findViewById(R.id.lvListOfLists)
         profile = findViewById(R.id.profile)
 
+
         val listOfLists = mutableListOf("Verbs","Nouns","Adjectives")
-
-
-        val words1 = arrayOf("寝る", "走る","食べる")
-        val hiragana1 = arrayOf("ねる", "はしる","たべる")
-        val romaji1 = arrayOf("neru","hashiru", "taberu")
-        val definitions1 = arrayOf("To sleep", "To run", "To eat")
-
-        val words2 = arrayOf("家族", "世界","お店")
-        val hiragana2 = arrayOf("かぞく", "せかい","おみせ")
-        val romaji2 = arrayOf("kazoku","sekai", "omise")
-        val definitions2 = arrayOf("Family", "World", "Shop")
-
-        val words3 = arrayOf("狭い", "少ない","高い")
-        val hiragana3 = arrayOf("せまい", "すくない","たかい")
-        val romaji3 = arrayOf("semai","sukunai", "takai")
-        val definitions3 = arrayOf("Narrow", "Few", "Tall")
-
-        mapOfAllLists[listOfLists[0]] = createData(words1,hiragana1,romaji1,definitions1)
-        mapOfAllLists[listOfLists[1]] = createData(words2,hiragana2,romaji2,definitions2)
-        mapOfAllLists[listOfLists[2]] = createData(words3,hiragana3,romaji3,definitions3)
 
         arrayOfListInfo = ArrayList()
 
@@ -72,11 +56,6 @@ class MainActivity : AppCompatActivity() {
             val unit = ListData(listOfLists[i], mapOfAllLists[listOfLists[i]]!!.size)
             arrayOfListInfo.add(unit)
         }
-
-        checkFile()
-
-        println(mapOfAllLists)
-        println(arrayOfListInfo)
 
         val adapterMiddle = ListAdapter(this,arrayOfListInfo)
         binding.lvListOfLists.adapter = adapterMiddle
@@ -87,6 +66,7 @@ class MainActivity : AppCompatActivity() {
             if (result.resultCode == Activity.RESULT_OK) {
                 var myResult = result.data!!.extras?.getString("result")
                 updateList(myResult)
+                stringifyMap()
                 adapterMiddle.notifyDataSetChanged()
             }
         }
@@ -115,7 +95,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         profile.setOnClickListener{
-            println("profile clicked")
             val intent = Intent(this, MainActivity::class.java)
             if (theme == "Light"){
                 (intent.putExtra("theme", "Dark"))
@@ -139,6 +118,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //helper function for defaultMap()
     private fun createData(
         words: Array<String>,
         hiraganas: Array<String>,
@@ -153,44 +133,96 @@ class MainActivity : AppCompatActivity() {
         return wordList
     }
 
-    private fun checkFile(){
-        val fileName = "data.txt"
-        val file = File(this@MainActivity.filesDir, "data.txt")
+    private fun getMap(){
+        val file = File(this@MainActivity.filesDir, fileName)  //just to check if file exists
+        //if file exists, read. if not, call defaultMap to populate mapOfAllLists with default data
         if (file.exists()) {
-            println("file exists")
-            var fileInputStream: FileInputStream? = null
-            fileInputStream = openFileInput(fileName)
-            var inputStreamReader = InputStreamReader(fileInputStream)
-            val bufferedReader = BufferedReader(inputStreamReader)
-            val stringBuilder: StringBuilder = StringBuilder()
-            var text: String? = null
-            while (run {
-                    text = bufferedReader.readLine()
-                    text
-                } != null) {
-                stringBuilder.append(text)
-            }
-            println("read data is: " + (stringBuilder.toString()))
+            readFile(fileName)
         }
         else {
-            var mapStr = "{Verbs=[Word(name=寝る, hiragana=ねる, romaji=neru, definition=To sleep), Word(name=走る, hiragana=はしる, romaji=hashiru, definition=To run), Word(name=食べる, hiragana=たべる, romaji=taberu, definition=To eat)], Nouns=[Word(name=家族, hiragana=かぞく, romaji=kazoku, definition=Family), Word(name=世界, hiragana=せかい, romaji=sekai, definition=World), Word(name=お店, hiragana=おみせ, romaji=omise, definition=Shop)], Adjectives=[Word(name=狭い, hiragana=せまい, romaji=semai, definition=Narrow), Word(name=少ない, hiragana=すくない, romaji=sukunai, definition=Few), Word(name=高い, hiragana=たかい, romaji=takai, definition=Tall)]}"
-            val fileOutputStream: FileOutputStream
-            try {
-                fileOutputStream = openFileOutput(fileName, Context.MODE_PRIVATE)
-                fileOutputStream.write(mapStr.toByteArray())
-                println("file Written")
-            } catch (e: FileNotFoundException){
-                e.printStackTrace()
-            }catch (e: NumberFormatException){
-                e.printStackTrace()
-            }catch (e: IOException){
-                e.printStackTrace()
-            }catch (e: Exception){
-                e.printStackTrace()
-            }
+            defaultMap()
         }
+    }
+
+    private fun readFile(fileName: String){
+        val mapStr: String
+        var fileInputStream: FileInputStream? = null
+        fileInputStream = openFileInput(fileName)
+        var inputStreamReader = InputStreamReader(fileInputStream)
+        val bufferedReader = BufferedReader(inputStreamReader)
+        val stringBuilder: StringBuilder = StringBuilder()
+        var text: String? = null
+        while (run {
+                text = bufferedReader.readLine()
+                text
+            } != null) {
+            stringBuilder.append(text)
+        }
+        mapStr = stringBuilder.toString()
+        parseMap(mapStr)
+    }
+
+    private fun writeFile(fileName: String, mapStr: String){
+        val fileOutputStream: FileOutputStream
+        try {
+            fileOutputStream = openFileOutput(fileName, Context.MODE_PRIVATE)
+            fileOutputStream.write(mapStr.toByteArray())
+            println("file Written")
+        } catch (e: FileNotFoundException){
+            e.printStackTrace()
+        }catch (e: NumberFormatException){
+            e.printStackTrace()
+        }catch (e: IOException){
+            e.printStackTrace()
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    private fun parseMap(mapStr: String){
+        var gson = Gson()
+        val map = object : TypeToken< MutableMap<String, ArrayList<Word>>>() {}.type
+        try {
+            var parsedMap: MutableMap<String, ArrayList<Word>> = gson.fromJson(mapStr, map)
+            mapOfAllLists = parsedMap
+        } catch (e: IllegalStateException) {
+            println("error: ${e.message} ")
+        } catch (e: JsonSyntaxException) {
+            println("error: ${e.message} ")
+
+        }
+    }
+
+    private fun stringifyMap(){
+        val gson = Gson()
+        val json = gson.toJson(mapOfAllLists)
+        writeFile(fileName,json)
+    }
+
+    private fun defaultMap(){
+        val listOfLists = mutableListOf("Verbs","Nouns","Adjectives")
+
+        val words1 = arrayOf("寝る", "走る","食べる")
+        val hiragana1 = arrayOf("ねる", "はしる","たべる")
+        val romaji1 = arrayOf("neru","hashiru", "taberu")
+        val definitions1 = arrayOf("to sleep", "to run", "to eat")
+
+        val words2 = arrayOf("家族", "世界","お店")
+        val hiragana2 = arrayOf("かぞく", "せかい","おみせ")
+        val romaji2 = arrayOf("kazoku","sekai", "omise")
+        val definitions2 = arrayOf("family", "world", "shop")
+
+        val words3 = arrayOf("狭い", "少ない","高い")
+        val hiragana3 = arrayOf("せまい", "すくない","たかい")
+        val romaji3 = arrayOf("semai","sukunai", "takai")
+        val definitions3 = arrayOf("narrow", "few", "tall")
+
+        mapOfAllLists[listOfLists[0]] = createData(words1,hiragana1,romaji1,definitions1)
+        mapOfAllLists[listOfLists[1]] = createData(words2,hiragana2,romaji2,definitions2)
+        mapOfAllLists[listOfLists[2]] = createData(words3,hiragana3,romaji3,definitions3)
 
     }
+
 
 }
 
