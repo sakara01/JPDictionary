@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             arrayOfListInfo.add(unit)
         }
 
-        val adapterMiddle = ListAdapter(this,arrayOfListInfo)
+        val adapterMiddle = MainAdapter(this,arrayOfListInfo)
         binding.lvListOfLists.adapter = adapterMiddle
 
         val startForResult = registerForActivityResult(
