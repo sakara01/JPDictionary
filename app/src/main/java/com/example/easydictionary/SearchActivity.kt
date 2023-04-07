@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.view.animation.AlphaAnimation
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -34,11 +35,14 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var lvResultsList: ListView
     private lateinit var addedWord: Word
     private lateinit var addedList: ArrayList<Word>
-
+    private lateinit var theme: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.Light)
+
+        theme = intent.extras?.getString("theme").toString()
+        setTheme(if (theme == "Dark") R.style.Dark else R.style.Light)
+
         window.statusBarColor = ContextCompat.getColor(this, R.color.grey)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -72,10 +76,9 @@ class SearchActivity : AppCompatActivity() {
         binding.lvResultsList.adapter = adapterMiddle
 
         btnBack.setOnClickListener{
-            val intent = Intent()
             val gson = Gson()
             val json: String = gson.toJson(addedList)
-            intent.putExtra("result", json) //pass intent extra here
+            val intent = Intent().apply{ putExtra("result", json) }
             setResult(RESULT_OK, intent)
             finish()
             Animatoo.animateSlideRight(this)
@@ -121,6 +124,16 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        val gson = Gson()
+        val json: String = gson.toJson(addedList)
+        val intent = Intent().apply{putExtra("result", json) }
+        setResult(RESULT_OK, intent)
+        finish()
+        Animatoo.animateSlideRight(this)
+    }
+
+
     private fun parseJson(info: String){
         clearAll()
 
@@ -146,7 +159,7 @@ class SearchActivity : AppCompatActivity() {
         romajis.add(Wanakana.toRomaji(hiragana.toString()))
         //get english definitions
         var enobject: JSONArray= ((jsonObject.get("senses") as JSONArray).getJSONObject(0).get("english_definitions")) as JSONArray
-        var separator: String = ", "
+        var separator = ", "
         var endefs = enobject.join(separator)
         endefs = endefs.replace("\"","" )
         definitions.add(endefs)
@@ -169,14 +182,14 @@ class SearchActivity : AppCompatActivity() {
             var info = URL(jishoReq).readText()
             parseJson(info)
             runOnUiThread {
-                // Stuff that updates the UI
                 adapterMiddle.notifyDataSetChanged()
             }
         }
 
     }
 
-    fun testfun(pos: Int){
+    //add each word user clicks to the addedList to be sent to List activity
+    fun add(pos: Int){
         addedWord = wordList[pos]
         addedList.add(addedWord)
     }

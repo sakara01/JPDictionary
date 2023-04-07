@@ -9,5 +9,6 @@
     <attr name="blue" format="color"/>
     <attr name="blueVariant" format="color"/>
     <attr name="greyOut" format="color"/>
+    <attr name="imageDark" format="color"/>
 
 </resources>

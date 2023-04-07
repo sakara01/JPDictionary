@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="114dp"
+    android:layout_height="120dp"
     android:background="?attr/appBackground">
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,9 +19,10 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 app:layout_constraintWidth_percent="0.85"
-                android:layout_height="90dp"
-                app:cardElevation="8dp"
-                android:backgroundTint="?attr/listitems"
+                android:layout_height="104dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="10dp"
+                android:backgroundTint="?attr/cardback"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -30,34 +31,58 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/search_border"
+
                     >
 
-                    <TextView
-                        android:id="@+id/tvListName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="monospace"
-                        android:text="Default List"
-                        android:textColor="?attr/texts"
-                        android:textSize="18sp"
-                        android:layout_marginTop="17dp"
-                        app:layout_constraintEnd_toEndOf="parent"
+                    <ImageView
+                        android:id="@+id/imgPic"
+                        android:layout_width="120dp"
+                        android:layout_height="0dp"
+                        android:src="@mipmap/pic1"
+                        android:layout_marginBottom="-4dp"
+                        android:layout_marginStart="6dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/tvNumWords"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="20 words"
-                        android:fontFamily="monospace"
-                        android:textSize="14sp"
-                        android:textColor="?attr/blue"
-                        app:layout_constraintStart_toStartOf="parent"
+                    <FrameLayout
+                        android:id="@+id/frame"
+                        android:layout_width="0dp"
+                        app:layout_constraintWidth_percent="0.55"
+                        android:layout_height="match_parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvListName"/>
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
 
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <TextView
+                                android:id="@+id/tvListName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="28dp"
+                                android:fontFamily="monospace"
+                                android:text="Default List"
+                                android:textColor="?attr/texts"
+                                android:textSize="18sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tvNumWords"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="monospace"
+                                android:text="20 words"
+                                android:textColor="?attr/blue"
+                                android:textSize="14sp"
+                                android:layout_marginTop="6dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tvListName" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </FrameLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

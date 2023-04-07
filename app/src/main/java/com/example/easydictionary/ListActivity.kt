@@ -9,38 +9,44 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.forEach
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.example.easydictionary.databinding.ActivityListBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityListBinding
     private lateinit var wordList: ArrayList<Word>
     private lateinit var backBtn : ImageButton
-    private lateinit var btnHideWord : Button
-    private lateinit var btnHideDef : Button
+    private lateinit var btnHideWord : ImageView
+    private lateinit var btnHideDef : ImageView
     private lateinit var btnAdd : ImageButton
     private lateinit var listName: EditText
     private var hideWordClicked: Boolean = false
     private var hideDefClicked: Boolean = false
-    private lateinit var constraint1: View
-    private lateinit var constraint2: View
-    private lateinit var constraint3: View
+    private lateinit var constraint1: ConstraintLayout
+    private lateinit var constraint2: ConstraintLayout
+    private lateinit var constraint3: ConstraintLayout
     private var mainListStr: String? = null
-    private var words: Array<String>? = null
-    private var hiraganas: Array<String>? = null
-    private var romajis: Array<String>? = null
-    private var definitions: Array<String>? = null
+    private lateinit var copyList: ArrayList<Word>
+    private lateinit var theme: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.Light)
+
+        theme = intent.extras?.getString("theme").toString()
+        setTheme(if (theme == "Dark") R.style.Dark else R.style.Light)
+
         window.statusBarColor = ContextCompat.getColor(this, R.color.grey)
         binding = ActivityListBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -49,6 +55,7 @@ class ListActivity : AppCompatActivity() {
         var gson = Gson()
         val newArray = object : TypeToken<ArrayList<Word>>() {}.type
         wordList = gson.fromJson(mainListStr, newArray)
+        copyList = gson.fromJson(mainListStr, newArray)
 
 
         backBtn = findViewById(R.id.btnBack)
@@ -65,62 +72,37 @@ class ListActivity : AppCompatActivity() {
         buttonClick.repeatMode = 2
         buttonClick.repeatCount = 1
 
-        //wordList = ArrayList()
-
-        /*
-        for(i in words!!.indices){
-            val unit = Word(words!![i], hiraganas!![i], romajis!![i], definitions!![i])
-            wordList.add(unit)
-        }
-        */
-
         val adapterMiddle = MyAdapter(this,wordList)
         binding.lvWordList.adapter = adapterMiddle
 
         backBtn.setOnClickListener{
-            val intent = Intent()
             val gson = Gson()
+            showAllWords()
+            showAllDefs()
             val json: String = gson.toJson(wordList)
-            intent.putExtra("result", json) //pass intent extra here
+            val intent = Intent().apply { putExtra("result", json) }
             setResult(RESULT_OK, intent)
             finish()
             Animatoo.animateSlideRight(this)
         }
 
         btnHideWord.setOnClickListener{
-            if (!hideWordClicked) {
                 val rule = findViewById<ImageView>(R.id.JPrule)
-                rule.apply { translationZ = 30F }
-                hideWordClicked = true
-                hideAllWords()
+                hideWordClicked = !hideWordClicked
+                rule.apply { translationZ = if (hideWordClicked)30F else 0F }
+                if (hideWordClicked) hideAllWords() else showAllWords()
                 adapterMiddle.notifyDataSetChanged()
-            }
-            else {
-                val rule = findViewById<ImageView>(R.id.JPrule)
-                rule.apply { translationZ = 0F }
-                hideWordClicked = false
-                showAllWords()
-                adapterMiddle.notifyDataSetChanged()
-            }
         }
 
         btnHideDef.setOnClickListener{
-            if (!hideDefClicked) {
                 val rule = findViewById<ImageView>(R.id.ENrule)
-                rule.apply { translationZ = 30F }
-                hideDefClicked = true
-                hideAllDefs()
+                hideDefClicked = !hideDefClicked
+                rule.apply { translationZ = if (hideDefClicked)30F else 0F }
+                if (hideDefClicked) hideAllDefs() else showAllDefs()
                 adapterMiddle.notifyDataSetChanged()
-            }
-            else {
-                val rule = findViewById<ImageView>(R.id.ENrule)
-                rule.apply { translationZ = 0F }
-                hideDefClicked = false
-                showAllDefs()
-                adapterMiddle.notifyDataSetChanged()
-            }
         }
 
+        //gets result when Search activity finishes
         val startForResult = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result: ActivityResult ->
@@ -133,63 +115,76 @@ class ListActivity : AppCompatActivity() {
 
         btnAdd.setOnClickListener {
             btnAdd.startAnimation(buttonClick)
-            btnAdd.startAnimation(buttonClick)
-            startForResult.launch(Intent(this, SearchActivity::class.java))
+            val intent = Intent(this,SearchActivity::class.java)
+            intent.putExtra("theme", if (theme == "Dark") "Dark" else "Light")
+            startForResult.launch(intent)
             Animatoo.animateSlideLeft(this)
         }
 
-        constraint1.setOnClickListener{
-            constraint1.setBackgroundResource(R.drawable.border)
-            constraint2.setBackgroundResource(0)
-            constraint3.setBackgroundResource(0)
-        }
-        constraint2.setOnClickListener{
-            constraint1.setBackgroundResource(0)
-            constraint2.setBackgroundResource(R.drawable.border)
-            constraint3.setBackgroundResource(0)
-        }
-        constraint3.setOnClickListener{
-            constraint1.setBackgroundResource(0)
-            constraint2.setBackgroundResource(0)
-            constraint3.setBackgroundResource(R.drawable.border)
-        }
+        setOnClickListenersForConstraints(R.drawable.border, constraint1, constraint2, constraint3)
     }
 
+    override fun onBackPressed() {
+        val gson = Gson()
+        showAllWords()
+        showAllDefs()
+        val json: String = gson.toJson(wordList)
+        val intent = Intent().apply { putExtra("result", json)}
+        setResult(RESULT_OK, intent)
+        finish()
+        Animatoo.animateSlideRight(this)
+    }
 
 
     private fun hideAllWords(){
-        for(i in words!!.indices){
-            wordList[i].name = ""
-            wordList[i].hiragana = ""
+        wordList.forEach{
+            it.name = ""
+            it.hiragana = ""
         }
+
+
     }
     private fun showAllWords(){
-        for(i in words!!.indices){
-            wordList[i].name = words!![i]
-            wordList[i].hiragana = hiraganas!![i]
+        wordList.forEachIndexed { i, word ->
+            word.name= copyList[i].name
+            word.hiragana= copyList[i].hiragana
         }
     }
     private fun hideAllDefs(){
-        for(i in definitions!!.indices){
-            wordList[i].definition = ""
+        wordList.forEach{
+            it.definition = ""
         }
     }
 
     private fun showAllDefs(){
-        for(i in definitions!!.indices){
-            wordList[i].definition = definitions!![i]
+        wordList.forEachIndexed { i, word ->
+            word.definition = copyList[i].definition
         }
     }
 
     private fun updateList(myResult:String?){
         var gson = Gson()
-        val newArray = object : TypeToken<Array<Word>>() {}.type
-        var wordArray: Array<Word> = gson.fromJson(myResult, newArray)
-
-        for (i in 0 until wordArray.size)
-            wordList.add(wordArray[i])
+        val newArray = object : TypeToken<ArrayList<Word>>() {}.type
+        var wordArray: ArrayList<Word> = gson.fromJson(myResult, newArray)
+        var newWord: Word
+        for (i in 0 until wordArray.size) {
+            newWord = wordArray[i]
+            wordList.add(newWord)
+            copyList.add(newWord.copy())
+        }
     }
 
-
+    fun setOnClickListenersForConstraints(
+        borderDrawable: Int,
+        vararg constraints: ConstraintLayout
+    ) {
+        constraints.forEach { constraint ->
+            constraint.setOnClickListener {
+                constraints.forEach { c ->
+                    c.setBackgroundResource(if (c == constraint) borderDrawable else 0)
+                }
+            }
+        }
+    }
 
 }

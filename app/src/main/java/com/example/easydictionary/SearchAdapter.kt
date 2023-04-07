@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 
 class SearchAdapter(private val context: Activity, private val arrayList: ArrayList<Word>): ArrayAdapter<Word>(context,
@@ -20,14 +22,16 @@ class SearchAdapter(private val context: Activity, private val arrayList: ArrayL
     private lateinit var view: View
     private lateinit var inflater: LayoutInflater
     private lateinit var addBtn: FrameLayout
-    var counter: Int = 0
+    private lateinit var imgAdd: ImageView
     private lateinit var mContext: Context
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
         inflater = LayoutInflater.from(context)
-        view= inflater.inflate(R.layout.search_result, null)
+        view = inflater.inflate(R.layout.search_result, null);
         this.mContext = context
+
+        var isClicked: Boolean = false
 
         num = view.findViewById(R.id.tvNumber)
         kanji= view.findViewById(R.id.tvKanji)
@@ -35,6 +39,7 @@ class SearchAdapter(private val context: Activity, private val arrayList: ArrayL
         romaji= view.findViewById(R.id.tvRomaji)
         definition= view.findViewById(R.id.tvDef)
         addBtn = view.findViewById(R.id.btnAdd)
+        imgAdd = view.findViewById(R.id.imgAdd)
 
         num.text =  (position + 1).toString() +"."
         kanji.text = arrayList[position].name
@@ -42,18 +47,17 @@ class SearchAdapter(private val context: Activity, private val arrayList: ArrayL
         romaji.text = arrayList[position].romaji
         definition.text = arrayList[position].definition
 
-        if (position == 0){
-            counter = 0
-            println("counter set to 0")
+        if (arrayList.get(position).isClicked()) {
+            imgAdd.setImageResource(R.drawable.check);
+        }else{
+            imgAdd.setImageResource(R.drawable.plus);
         }
 
-        addBtn.setTag(counter)
-        counter += 1
-
         addBtn.setOnClickListener { v ->
-            val pos = v.tag as Int
+            arrayList.get(position).toggleClick()
+            notifyDataSetChanged()
             if (mContext is SearchActivity) {
-                (mContext as SearchActivity).testfun(pos)
+                (mContext as SearchActivity).add(position)
             }
         }
         return view
