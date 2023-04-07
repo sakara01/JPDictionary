@@ -87,20 +87,13 @@
                     />
             </FrameLayout>
 
-            <!--
-            <ImageButton
-                android:id="@+id/btnSliders"
-                android:layout_width="48dp"
+            <ImageView
+                android:id="@+id/loading"
+                android:layout_width="26dp"
                 android:layout_height="match_parent"
-                android:src="@mipmap/sliders"
-                android:scaleType="fitCenter"
-                app:tint="?attr/textsGreyed"
-                android:background="@null"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="select input type"
-                />
-            -->
+                app:layout_constraintEnd_toStartOf="@id/btnClose"/>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

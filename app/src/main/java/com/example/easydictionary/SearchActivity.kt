@@ -17,7 +17,8 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.net.URL
 import java.util.*
-
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
@@ -37,6 +38,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var addedList: ArrayList<Word>
     private lateinit var theme: String
     private lateinit var tutorial: View
+    private lateinit var loading: ImageView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +66,7 @@ class SearchActivity : AppCompatActivity() {
         etInput = findViewById(R.id.etInput)
         lvResultsList = findViewById(R.id.lvResultsList)
         tutorial = findViewById(R.id.tutorial)
+        loading = findViewById(R.id.loading)
 
         //send request to jisho and use loop to add to these arrays
         words = mutableListOf()
@@ -93,6 +96,14 @@ class SearchActivity : AppCompatActivity() {
             etInput.hint = "せんせい, sensei, teacher"
         }
 
+        Glide.with(this@SearchActivity)
+            .asGif()
+            .load(R.mipmap.loading) // Replace with the resource ID of your GIF
+            .apply(RequestOptions().override(300, 300)) // Optionally, you can specify the width and height of the ImageView
+            .into(loading)
+
+        loading.visibility = View.GONE
+
         etInput.addTextChangedListener(object: TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -102,6 +113,7 @@ class SearchActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 tutorial.apply { translationZ = -1F }
+                loading.visibility = View.VISIBLE
                 timer.cancel()
                 timer = Timer()
                 timer.schedule(
@@ -186,6 +198,7 @@ class SearchActivity : AppCompatActivity() {
             var info = URL(jishoReq).readText()
             parseJson(info)
             runOnUiThread {
+                loading.visibility = View.GONE
                 adapterMiddle.notifyDataSetChanged()
             }
         }

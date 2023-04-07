@@ -50,5 +50,6 @@ dependencies {
     implementation 'dev.esnault.wanakana:wanakana-android:1.1.1'
     implementation 'dev.esnault.wanakana:wanakana-core:1.1.1'
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
 
 }

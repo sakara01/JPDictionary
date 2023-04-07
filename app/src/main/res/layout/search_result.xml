@@ -111,7 +111,7 @@
             android:layout_gravity="center"
             android:background="@drawable/roundbutton2"
             android:backgroundTint="?attr/blue"
-            android:translationZ="10dp"
+            android:translationZ="0dp"
             android:src="@drawable/plus"
             app:tint="?attr/appBackground"
             android:contentDescription="add to list"/>

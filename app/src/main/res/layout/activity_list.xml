@@ -27,7 +27,7 @@
         android:layout_marginTop="6dp"
         android:backgroundTint="?attr/blueVariant"
         android:fontFamily="monospace"
-        android:hint=" Enter List Name "
+        android:hint="Enter List Name"
         android:textAlignment="center"
         android:inputType="textPersonName"
         android:textColorHint="?attr/greyOut"

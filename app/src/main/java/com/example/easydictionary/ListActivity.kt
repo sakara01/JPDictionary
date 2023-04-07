@@ -5,11 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AlphaAnimation
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -51,6 +47,10 @@ class ListActivity : AppCompatActivity() {
         binding = ActivityListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        listName = findViewById(R.id.etListName)
+        var name = intent.extras?.getString("name")
+        if (name != "new list")listName.setText(name)
+
         mainListStr = intent.extras?.getString("mainList")
         var gson = Gson()
         val newArray = object : TypeToken<ArrayList<Word>>() {}.type
@@ -62,7 +62,6 @@ class ListActivity : AppCompatActivity() {
         btnHideWord = findViewById(R.id.btnHideWord)
         btnHideDef = findViewById(R.id.btnHideDef)
         btnAdd= findViewById(R.id.btnAdd)
-        listName = findViewById(R.id.etListName)
         constraint1 = findViewById(R.id.constraint1)
         constraint2 = findViewById(R.id.constraint2)
         constraint3 = findViewById(R.id.constraint3)
@@ -76,14 +75,19 @@ class ListActivity : AppCompatActivity() {
         binding.lvWordList.adapter = adapterMiddle
 
         backBtn.setOnClickListener{
-            val gson = Gson()
-            showAllWords()
-            showAllDefs()
-            val json: String = gson.toJson(wordList)
-            val intent = Intent().apply { putExtra("result", json) }
-            setResult(RESULT_OK, intent)
-            finish()
-            Animatoo.animateSlideRight(this)
+            var entered = listName.text.toString()
+            if (entered.isNullOrEmpty() && wordList.isNotEmpty() ){
+                Toast.makeText(this, "You must name the list to save changes",Toast.LENGTH_SHORT).show()
+            }else {
+                val gson = Gson()
+                showAllWords()
+                showAllDefs()
+                val json: String = gson.toJson(wordList)
+                val intent = Intent().apply { putExtra("result", json); putExtra("name",entered)}
+                setResult(RESULT_OK, intent)
+                finish()
+                Animatoo.animateSlideRight(this)
+            }
         }
 
         btnHideWord.setOnClickListener{

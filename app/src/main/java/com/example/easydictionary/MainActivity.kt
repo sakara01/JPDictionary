@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var myListView: ListView
     private lateinit var clickedList: String
     private var mapOfAllLists= mutableMapOf<String, ArrayList<Word>>()
-    private lateinit var arrayOfListInfo: ArrayList<ListData>
+    private var arrayOfListInfo= ArrayList<ListData>()
     private lateinit var theme: String
     private lateinit var profile: FrameLayout
     private val fileName = "data.txt"
@@ -31,10 +31,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         theme = intent.extras?.getString("theme").toString()
         if (theme == "null"){theme ="Light" }
-
-        if (theme == "Dark"){setTheme(R.style.Dark) }
-        else {setTheme(R.style.Light)}
-
+        setTheme(if (theme == "Dark") R.style.Dark else R.style.Light)
         super.onCreate(savedInstanceState)
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.grey)
@@ -47,16 +44,6 @@ class MainActivity : AppCompatActivity() {
         myListView= findViewById(R.id.lvListOfLists)
         profile = findViewById(R.id.profile)
 
-
-        val listOfLists = mutableListOf("Verbs","Nouns","Adjectives")
-
-        arrayOfListInfo = ArrayList()
-
-        listOfLists.forEach { item ->
-            val unit = ListData(item, mapOfAllLists[item]!!.size)
-            arrayOfListInfo.add(unit)
-        }
-
         val adapterMiddle = MainAdapter(this,arrayOfListInfo)
         binding.lvListOfLists.adapter = adapterMiddle
 
@@ -65,9 +52,12 @@ class MainActivity : AppCompatActivity() {
         ) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 var myResult = result.data!!.extras?.getString("result")
-                updateList(myResult)
-                stringifyMap()
-                adapterMiddle.notifyDataSetChanged()
+                var listname = result.data!!.extras?.getString("name")
+                if (!listname.isNullOrEmpty()){
+                    updateList(myResult, listname)
+                    stringifyMap()
+                    adapterMiddle.notifyDataSetChanged()
+                }
             }
         }
 
@@ -80,6 +70,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this,ListActivity::class.java)
 
             val json: String = gson.toJson(mapOfAllLists[nameOfSelected.text])
+            intent.putExtra("name",clickedList)
             intent.putExtra("mainList", json)
             intent.putExtra("theme",theme)
 
@@ -90,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         addBtn.setOnClickListener{
             val unit = ListData("new list", 0)
             arrayOfListInfo.add(unit)
-            mapOfAllLists["new list"] = ArrayList<Word>()
+            //mapOfAllLists["new list"] = ArrayList<Word>()
             adapterMiddle.notifyDataSetChanged()
         }
 
@@ -106,14 +97,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateList(myResult: String?){
+    private fun updateList(myResult: String?, listname: String?){
         var gson = Gson()
         val newArray = object : TypeToken<ArrayList<Word>>() {}.type
         var wordArray: ArrayList<Word> = gson.fromJson(myResult, newArray)
-        mapOfAllLists[clickedList] = wordArray
-        for (i in 0 until arrayOfListInfo.size) {
-            if (arrayOfListInfo[i].listName == clickedList){
-                arrayOfListInfo[i].numWords = mapOfAllLists[clickedList]!!.size
+        if(clickedList=="new list"){
+            clickedList = listname!!
+            //removes list item if name is 'new list'
+            arrayOfListInfo.removeIf{ list ->
+                list.listName == "new list"
+            }
+            val unit = ListData(clickedList, wordArray.size)
+            arrayOfListInfo.add(unit)
+            println(arrayOfListInfo)
+            mapOfAllLists[clickedList] = wordArray
+        }else {
+            mapOfAllLists[clickedList] = wordArray
+            arrayOfListInfo.forEachIndexed { index, _ ->
+                if (arrayOfListInfo[index].listName == clickedList) {
+                    arrayOfListInfo[index].numWords = mapOfAllLists[clickedList]!!.size
+                }
             }
         }
     }
@@ -189,8 +192,15 @@ class MainActivity : AppCompatActivity() {
             println("error: ${e.message} ")
         } catch (e: JsonSyntaxException) {
             println("error: ${e.message} ")
-
         }
+
+        //update arrayoflistinfo
+        mapOfAllLists.forEach { t, u ->
+            val unit = ListData(t, u.size)
+            arrayOfListInfo.add(unit)
+        }
+        println("array in parseMap: " + arrayOfListInfo)
+
     }
 
     private fun stringifyMap(){
@@ -220,6 +230,11 @@ class MainActivity : AppCompatActivity() {
         mapOfAllLists[listOfLists[0]] = createData(words1,hiragana1,romaji1,definitions1)
         mapOfAllLists[listOfLists[1]] = createData(words2,hiragana2,romaji2,definitions2)
         mapOfAllLists[listOfLists[2]] = createData(words3,hiragana3,romaji3,definitions3)
+
+        listOfLists.forEach { item ->
+            val unit = ListData(item, mapOfAllLists[item]!!.size)
+            arrayOfListInfo.add(unit)
+        }
 
     }
 
