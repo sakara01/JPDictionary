@@ -106,6 +106,68 @@
 
     </FrameLayout>
 
+    <FrameLayout
+        android:id="@+id/tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:translationZ="1dp"
+        android:background="?attr/appBackground">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imgArrow"
+                android:layout_width="0dp"
+                android:layout_height="90dp"
+                android:layout_marginTop="80dp"
+                android:src="@mipmap/arrow"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvTutorial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Please type in any hiragana, katakana, romaji, or english to search."
+                android:textSize="18sp"
+                android:textColor="?attr/greyOut"
+                android:fontFamily="monospace"
+                android:textAlignment="center"
+                android:layout_marginTop="40dp"
+                app:layout_constraintTop_toBottomOf="@id/imgArrow"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="?attr/appBackground"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="40dp"
+                android:layout_marginTop="40dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTutorial">
+
+                    <ImageView
+                        android:id="@+id/imgIcon"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:src="@mipmap/ic_launcher"
+                        />
+
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
     <ListView
         android:id="@+id/lvResultsList"
         android:layout_width="match_parent"
@@ -115,7 +177,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/searchBar"
-        tools:listitem="@layout/search_result">
+        tools:listitem="@layout/search_result"
+        android:background="?attr/appBackground">
 
     </ListView>
 

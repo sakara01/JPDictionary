@@ -36,6 +36,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var addedWord: Word
     private lateinit var addedList: ArrayList<Word>
     private lateinit var theme: String
+    private lateinit var tutorial: View
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +63,7 @@ class SearchActivity : AppCompatActivity() {
         btnClose = findViewById(R.id.btnClose)
         etInput = findViewById(R.id.etInput)
         lvResultsList = findViewById(R.id.lvResultsList)
+        tutorial = findViewById(R.id.tutorial)
 
         //send request to jisho and use loop to add to these arrays
         words = mutableListOf()
@@ -98,6 +101,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
+                tutorial.apply { translationZ = -1F }
                 timer.cancel()
                 timer = Timer()
                 timer.schedule(
