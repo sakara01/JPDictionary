@@ -52,8 +52,8 @@ class MainActivity : AppCompatActivity() {
 
         arrayOfListInfo = ArrayList()
 
-        for(i in listOfLists.indices){
-            val unit = ListData(listOfLists[i], mapOfAllLists[listOfLists[i]]!!.size)
+        listOfLists.forEach { item ->
+            val unit = ListData(item, mapOfAllLists[item]!!.size)
             arrayOfListInfo.add(unit)
         }
 

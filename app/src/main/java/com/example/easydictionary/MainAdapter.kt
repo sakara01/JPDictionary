@@ -34,7 +34,6 @@ class MainAdapter (private val context: Activity, private val arrayList: ArrayLi
 
         picArray = arrayOf("pic1","pic2", "pic3","pic4","pic5", "pic6","pic7", "pic8","pic9","pic1")
         counter = position % 9
-        println(counter)
 
         try {
             val resourceid = resources.getIdentifier(picArray[counter], "mipmap", context.packageName)

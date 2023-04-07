@@ -1,7 +1,6 @@
 package com.example.easydictionary
 
 import android.content.Intent
-import android.media.Image
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -42,8 +41,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         theme = intent.extras?.getString("theme").toString()
-        if (theme == "Dark"){setTheme(R.style.Dark) }
-        else {setTheme(R.style.Light)}
+        setTheme(if (theme == "Dark") R.style.Dark else R.style.Light)
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.grey)
         binding = ActivitySearchBinding.inflate(layoutInflater)
@@ -78,10 +76,9 @@ class SearchActivity : AppCompatActivity() {
         binding.lvResultsList.adapter = adapterMiddle
 
         btnBack.setOnClickListener{
-            val intent = Intent()
             val gson = Gson()
             val json: String = gson.toJson(addedList)
-            intent.putExtra("result", json) //pass intent extra here
+            val intent = Intent().apply{ putExtra("result", json) }
             setResult(RESULT_OK, intent)
             finish()
             Animatoo.animateSlideRight(this)
@@ -127,6 +124,16 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        val gson = Gson()
+        val json: String = gson.toJson(addedList)
+        val intent = Intent().apply{putExtra("result", json) }
+        setResult(RESULT_OK, intent)
+        finish()
+        Animatoo.animateSlideRight(this)
+    }
+
+
     private fun parseJson(info: String){
         clearAll()
 
@@ -152,7 +159,7 @@ class SearchActivity : AppCompatActivity() {
         romajis.add(Wanakana.toRomaji(hiragana.toString()))
         //get english definitions
         var enobject: JSONArray= ((jsonObject.get("senses") as JSONArray).getJSONObject(0).get("english_definitions")) as JSONArray
-        var separator: String = ", "
+        var separator = ", "
         var endefs = enobject.join(separator)
         endefs = endefs.replace("\"","" )
         definitions.add(endefs)
@@ -175,33 +182,16 @@ class SearchActivity : AppCompatActivity() {
             var info = URL(jishoReq).readText()
             parseJson(info)
             runOnUiThread {
-                // Stuff that updates the UI
                 adapterMiddle.notifyDataSetChanged()
             }
         }
 
     }
 
-    fun testfun(pos: Int){
+    //add each word user clicks to the addedList to be sent to List activity
+    fun add(pos: Int){
         addedWord = wordList[pos]
         addedList.add(addedWord)
-        //println("testfun: " + addedList)
-    }
-
-    fun setImage(pos: Int, isClicked: Boolean) {
-        var firstListItemPosition: Int = lvResultsList.getFirstVisiblePosition();
-        var lastListItemPosition: Int = firstListItemPosition + lvResultsList.getChildCount() - 1;
-        var view: View
-        if (pos < firstListItemPosition || pos > lastListItemPosition ) {
-            view = lvResultsList.getAdapter().getView(pos, null, lvResultsList);
-        } else {
-            var childIndex = pos - firstListItemPosition;
-            view = lvResultsList.getChildAt(childIndex);
-        }
-        var img = view.findViewById<ImageView>(R.id.imgAdd)
-
-        if (isClicked){ img.setImageResource(R.drawable.check)}
-        else {img.setImageResource(R.drawable.plus)}
     }
 
 }

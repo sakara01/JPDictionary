@@ -56,10 +56,8 @@ class SearchAdapter(private val context: Activity, private val arrayList: ArrayL
         addBtn.setOnClickListener { v ->
             arrayList.get(position).toggleClick()
             notifyDataSetChanged()
-            //println("position is: " + position)
             if (mContext is SearchActivity) {
-                (mContext as SearchActivity).testfun(position)
-                //(mContext as SearchActivity).setImage(pos,isClicked)
+                (mContext as SearchActivity).add(position)
             }
         }
         return view

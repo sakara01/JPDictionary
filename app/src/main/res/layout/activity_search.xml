@@ -33,7 +33,7 @@
                 android:scaleX="1.2"
                 android:scaleY="1.2"
                 android:paddingStart="6dp"
-                app:tint="?attr/greyOut"
+                app:tint="?attr/blue"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:src="@drawable/back"
