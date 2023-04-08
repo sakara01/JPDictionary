@@ -22,7 +22,8 @@ import kotlin.collections.ArrayList
 
 class ListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityListBinding
-    private lateinit var wordList: ArrayList<Word>
+    private var wordList= ArrayList<Word>()
+    private var copyList= ArrayList<Word>()
     private lateinit var backBtn : ImageButton
     private lateinit var btnHideWord : ImageView
     private lateinit var btnHideDef : ImageView
@@ -34,7 +35,6 @@ class ListActivity : AppCompatActivity() {
     private lateinit var constraint2: ConstraintLayout
     private lateinit var constraint3: ConstraintLayout
     private var mainListStr: String? = null
-    private lateinit var copyList: ArrayList<Word>
     private lateinit var theme: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,8 +54,10 @@ class ListActivity : AppCompatActivity() {
         mainListStr = intent.extras?.getString("mainList")
         var gson = Gson()
         val newArray = object : TypeToken<ArrayList<Word>>() {}.type
-        wordList = gson.fromJson(mainListStr, newArray)
-        copyList = gson.fromJson(mainListStr, newArray)
+        if (mainListStr != "null"){
+            wordList = gson.fromJson(mainListStr, newArray)
+            copyList = gson.fromJson(mainListStr, newArray)
+        }
 
 
         backBtn = findViewById(R.id.btnBack)

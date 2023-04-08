@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var addBtn: ImageButton
     private lateinit var myListView: ListView
     private lateinit var clickedList: String
-    private var mapOfAllLists= mutableMapOf<String, ArrayList<Word>>()
+    private var mapOfAllLists= LinkedHashMap<String, ArrayList<Word>>()
     private var arrayOfListInfo= ArrayList<ListData>()
     private lateinit var theme: String
     private lateinit var profile: FrameLayout
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             var gson = Gson()
             val intent = Intent(this,ListActivity::class.java)
 
-            val json: String = gson.toJson(mapOfAllLists[nameOfSelected.text])
+            val json: String = gson.toJson(mapOfAllLists[clickedList])
             intent.putExtra("name",clickedList)
             intent.putExtra("mainList", json)
             intent.putExtra("theme",theme)
@@ -101,24 +101,55 @@ class MainActivity : AppCompatActivity() {
         var gson = Gson()
         val newArray = object : TypeToken<ArrayList<Word>>() {}.type
         var wordArray: ArrayList<Word> = gson.fromJson(myResult, newArray)
-        if(clickedList=="new list"){
-            clickedList = listname!!
-            //removes list item if name is 'new list'
-            arrayOfListInfo.removeIf{ list ->
-                list.listName == "new list"
-            }
-            val unit = ListData(clickedList, wordArray.size)
-            arrayOfListInfo.add(unit)
-            println(arrayOfListInfo)
-            mapOfAllLists[clickedList] = wordArray
-        }else {
-            mapOfAllLists[clickedList] = wordArray
-            arrayOfListInfo.forEachIndexed { index, _ ->
-                if (arrayOfListInfo[index].listName == clickedList) {
-                    arrayOfListInfo[index].numWords = mapOfAllLists[clickedList]!!.size
+
+        var save = clickedList
+        clickedList = listname!!
+        var interMap= LinkedHashMap<String, ArrayList<Word>>()
+
+        if (save == "new list"){
+            println("should go here if list new")
+            mapOfAllLists[clickedList] = wordArray   //updates mapofalllists with new arraylist
+        }
+        else if (save != clickedList) {  //name of list changed
+            println("existing list name change go here")
+            mapOfAllLists.forEach { (key, value) ->
+                if (key != save) {
+                    interMap[key] = value
+                } else {
+                    interMap[clickedList] = wordArray
                 }
             }
+            println(interMap)
+
+            mapOfAllLists.clear()
+            interMap.forEach{(key, value)->
+                mapOfAllLists[key]= value
+            }
+            println(mapOfAllLists)
+        }else{  //name of list not changed
+            println("list edited normally")
+            mapOfAllLists[clickedList] = wordArray   //updates mapofalllists with new arraylist
+            println("else map: " + mapOfAllLists)
         }
+
+        val removed = arrayOfListInfo.removeIf { listelm ->
+            listelm.listName == "new list"
+        }
+        if (removed){
+            val unit = ListData(clickedList, wordArray.size)
+            arrayOfListInfo.add(unit)
+        }else {
+            arrayOfListInfo.forEachIndexed { index, _ ->
+                if (arrayOfListInfo[index].listName == save) {
+                    arrayOfListInfo[index].numWords = wordArray.size
+                    if (save != clickedList) {  //name of list changed
+                        arrayOfListInfo[index].listName = clickedList
+                    }
+                }
+
+            }
+        }
+
     }
 
     //helper function for defaultMap()
@@ -184,9 +215,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun parseMap(mapStr: String){
         var gson = Gson()
-        val map = object : TypeToken< MutableMap<String, ArrayList<Word>>>() {}.type
+        val map = object : TypeToken< LinkedHashMap<String, ArrayList<Word>>>() {}.type
         try {
-            var parsedMap: MutableMap<String, ArrayList<Word>> = gson.fromJson(mapStr, map)
+            var parsedMap: LinkedHashMap<String, ArrayList<Word>> = gson.fromJson(mapStr, map)
             mapOfAllLists = parsedMap
         } catch (e: IllegalStateException) {
             println("error: ${e.message} ")
