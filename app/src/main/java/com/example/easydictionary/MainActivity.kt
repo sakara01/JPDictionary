@@ -107,11 +107,9 @@ class MainActivity : AppCompatActivity() {
         var interMap= LinkedHashMap<String, ArrayList<Word>>()
 
         if (save == "new list"){
-            println("should go here if list new")
             mapOfAllLists[clickedList] = wordArray   //updates mapofalllists with new arraylist
         }
         else if (save != clickedList) {  //name of list changed
-            println("existing list name change go here")
             mapOfAllLists.forEach { (key, value) ->
                 if (key != save) {
                     interMap[key] = value
@@ -119,17 +117,12 @@ class MainActivity : AppCompatActivity() {
                     interMap[clickedList] = wordArray
                 }
             }
-            println(interMap)
-
             mapOfAllLists.clear()
             interMap.forEach{(key, value)->
                 mapOfAllLists[key]= value
             }
-            println(mapOfAllLists)
         }else{  //name of list not changed
-            println("list edited normally")
             mapOfAllLists[clickedList] = wordArray   //updates mapofalllists with new arraylist
-            println("else map: " + mapOfAllLists)
         }
 
         val removed = arrayOfListInfo.removeIf { listelm ->
@@ -139,17 +132,15 @@ class MainActivity : AppCompatActivity() {
             val unit = ListData(clickedList, wordArray.size)
             arrayOfListInfo.add(unit)
         }else {
-            arrayOfListInfo.forEachIndexed { index, _ ->
-                if (arrayOfListInfo[index].listName == save) {
-                    arrayOfListInfo[index].numWords = wordArray.size
-                    if (save != clickedList) {  //name of list changed
-                        arrayOfListInfo[index].listName = clickedList
+            arrayOfListInfo.forEach { listelm ->
+                if (listelm.listName == save) {
+                    listelm.numWords = wordArray.size
+                    if (save != clickedList) {
+                        listelm.listName = clickedList
                     }
                 }
-
             }
         }
-
     }
 
     //helper function for defaultMap()
@@ -230,8 +221,6 @@ class MainActivity : AppCompatActivity() {
             val unit = ListData(t, u.size)
             arrayOfListInfo.add(unit)
         }
-        println("array in parseMap: " + arrayOfListInfo)
-
     }
 
     private fun stringifyMap(){
