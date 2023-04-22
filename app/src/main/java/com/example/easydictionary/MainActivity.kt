@@ -4,10 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.example.easydictionary.databinding.ActivityMainBinding
@@ -23,10 +25,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var myListView: ListView
     private lateinit var clickedList: String
     private var mapOfAllLists= LinkedHashMap<String, ArrayList<Word>>()
-    private var arrayOfListInfo= ArrayList<ListData>()
+    var arrayOfListInfo= ArrayList<ListData>()
+    var arrayOfListInfoCopy= ArrayList<ListData>()
     private lateinit var theme: String
     private lateinit var profile: FrameLayout
     private val fileName = "data.txt"
+    private lateinit var searchBar: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         theme = intent.extras?.getString("theme").toString()
@@ -43,8 +47,9 @@ class MainActivity : AppCompatActivity() {
         addBtn = findViewById(R.id.btnAdd)
         myListView= findViewById(R.id.lvListOfLists)
         profile = findViewById(R.id.profile)
+        searchBar = findViewById(R.id.searchBar)
 
-        val adapterMiddle = MainAdapter(this,arrayOfListInfo)
+        var adapterMiddle = MainAdapter(this,arrayOfListInfo)
         binding.lvListOfLists.adapter = adapterMiddle
 
         val startForResult = registerForActivityResult(
@@ -81,20 +86,29 @@ class MainActivity : AppCompatActivity() {
         addBtn.setOnClickListener{
             val unit = ListData("new list", 0)
             arrayOfListInfo.add(unit)
-            //mapOfAllLists["new list"] = ArrayList<Word>()
             adapterMiddle.notifyDataSetChanged()
         }
 
         profile.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)
-            if (theme == "Light"){
-                (intent.putExtra("theme", "Dark"))
-            } else {
-                (intent.putExtra("theme", "Light"))
-            }
+            intent.putExtra("theme", if (theme == "Light") "Dark" else "Light")
             startActivity(intent)
             finish()
         }
+
+        searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                adapterMiddle.filter.filter(newText)
+                return true
+            }
+        })
+
+
+
     }
 
     private fun updateList(myResult: String?, listname: String?){
@@ -141,6 +155,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        arrayOfListInfoCopy = ArrayList(arrayOfListInfo)
     }
 
     //helper function for defaultMap()
@@ -221,6 +236,8 @@ class MainActivity : AppCompatActivity() {
             val unit = ListData(t, u.size)
             arrayOfListInfo.add(unit)
         }
+
+        arrayOfListInfoCopy = ArrayList(arrayOfListInfo)
     }
 
     private fun stringifyMap(){

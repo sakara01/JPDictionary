@@ -1,10 +1,12 @@
 package com.example.easydictionary
 
 import android.app.Activity
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Filter
 import android.widget.ImageView
 import android.widget.TextView
 
@@ -20,6 +22,8 @@ class MainAdapter (private val context: Activity, private val arrayList: ArrayLi
     private val resources = context.resources
     private var counter: Int = 0
 
+    private var filteredItems: ArrayList<ListData> = arrayListOf()
+    private lateinit var temp: ArrayList<ListData>
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         inflater = LayoutInflater.from(context)
@@ -47,4 +51,41 @@ class MainAdapter (private val context: Activity, private val arrayList: ArrayLi
 
         return view
     }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                temp = (context as MainActivity).arrayOfListInfoCopy
+
+                val filteredList = ArrayList<ListData>()
+                if (constraint == null || constraint.isEmpty()) {
+                    filteredList.addAll(temp)
+                } else {
+                    val filterPattern = constraint.toString().toLowerCase().trim()
+                    println("filterpattern is: ")
+                    println(filterPattern)
+                    println("arrayList: ")
+                    println(arrayList)
+                    println("temp")
+                    println(temp)
+                    for (item in temp) {
+                        if (item.listName.toLowerCase().contains(filterPattern)) {
+                            filteredList.add(item)
+                            //println(item)
+                        }
+                    }
+                }
+                val results = FilterResults()
+                results.values = filteredList
+                return results
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                arrayList.clear()
+                arrayList.addAll(results?.values as ArrayList<ListData>)
+                notifyDataSetChanged()
+            }
+        }
+    }
+
     }
