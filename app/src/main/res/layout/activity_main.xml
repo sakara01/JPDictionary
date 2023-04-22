@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="?attr/appBackground">
+    android:background="?attr/appBackground"
+    android:id="@+id/mainparent">
 
     <TextView
         android:id="@+id/tvTitle"
@@ -82,7 +83,7 @@
 
     <ListView
         android:id="@+id/lvListOfLists"
-        android:layout_width="409dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:backgroundTint="?attr/appBackground"
         android:divider="@null"

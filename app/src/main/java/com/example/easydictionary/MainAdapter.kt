@@ -62,12 +62,12 @@ class MainAdapter (private val context: Activity, private val arrayList: ArrayLi
                     filteredList.addAll(temp)
                 } else {
                     val filterPattern = constraint.toString().toLowerCase().trim()
-                    println("filterpattern is: ")
-                    println(filterPattern)
-                    println("arrayList: ")
-                    println(arrayList)
-                    println("temp")
-                    println(temp)
+                    //println("filterpattern is: ")
+                    //println(filterPattern)
+                    //println("arrayList: ")
+                    //println(arrayList)
+                    //println("temp")
+                    //println(temp)
                     for (item in temp) {
                         if (item.listName.toLowerCase().contains(filterPattern)) {
                             filteredList.add(item)

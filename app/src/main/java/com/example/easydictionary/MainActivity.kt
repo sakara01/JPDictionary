@@ -10,6 +10,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.example.easydictionary.databinding.ActivityMainBinding
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var profile: FrameLayout
     private val fileName = "data.txt"
     private lateinit var searchBar: SearchView
+    private lateinit var mainparent: ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         theme = intent.extras?.getString("theme").toString()
@@ -48,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         myListView= findViewById(R.id.lvListOfLists)
         profile = findViewById(R.id.profile)
         searchBar = findViewById(R.id.searchBar)
+        mainparent = findViewById(R.id.mainparent)
 
         var adapterMiddle = MainAdapter(this,arrayOfListInfo)
         binding.lvListOfLists.adapter = adapterMiddle
@@ -98,6 +101,7 @@ class MainActivity : AppCompatActivity() {
 
         searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
+                searchBar.clearFocus()
                 return false
             }
 
@@ -107,7 +111,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-
+        clearSearchFocus()
 
     }
 
@@ -273,6 +277,24 @@ class MainActivity : AppCompatActivity() {
             arrayOfListInfo.add(unit)
         }
 
+    }
+
+    private fun clearSearchFocus(){
+        mainparent.setOnTouchListener{ _, _ ->
+            if (searchBar.hasFocus()){
+                searchBar.clearFocus()
+                println("should clear focus main parent")
+            }
+            false
+        }
+
+        myListView.setOnTouchListener{ _, _ ->
+            if (searchBar.hasFocus()){
+                searchBar.clearFocus()
+                println("should clear focus mylistview")
+            }
+            false
+        }
     }
 
 
