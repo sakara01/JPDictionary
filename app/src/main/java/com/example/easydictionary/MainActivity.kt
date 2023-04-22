@@ -64,6 +64,10 @@ class MainActivity : AppCompatActivity() {
                 if (!listname.isNullOrEmpty()){
                     updateList(myResult, listname)
                     stringifyMap()
+                    println("array in startforResutl:")
+                    println(arrayOfListInfo)
+                    adapterMiddle.clear()
+                    adapterMiddle.addAll(ArrayList(arrayOfListInfo))
                     adapterMiddle.notifyDataSetChanged()
                 }
             }
@@ -82,6 +86,8 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("mainList", json)
             intent.putExtra("theme",theme)
 
+            arrayOfListInfo = ArrayList(arrayOfListInfoCopy) //reset array to original
+
             startForResult.launch(intent)
             Animatoo.animateSlideLeft(this)
         }
@@ -89,6 +95,11 @@ class MainActivity : AppCompatActivity() {
         addBtn.setOnClickListener{
             val unit = ListData("new list", 0)
             arrayOfListInfo.add(unit)
+            arrayOfListInfoCopy.add(unit)
+            println("array in addbtn")
+            println(arrayOfListInfo)
+            adapterMiddle.clear()
+            adapterMiddle.addAll(ArrayList(arrayOfListInfo))
             adapterMiddle.notifyDataSetChanged()
         }
 
@@ -111,7 +122,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        clearSearchFocus()
+        clearSearchFocus()  //clear search bar focus if user clicks outside it
 
     }
 
@@ -143,6 +154,7 @@ class MainActivity : AppCompatActivity() {
             mapOfAllLists[clickedList] = wordArray   //updates mapofalllists with new arraylist
         }
 
+        //remove arrayoflistinfo item if it is named "new list", and replace with actual name/data
         val removed = arrayOfListInfo.removeIf { listelm ->
             listelm.listName == "new list"
         }
@@ -160,6 +172,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
         arrayOfListInfoCopy = ArrayList(arrayOfListInfo)
+        println("array in updateList")
+        println(arrayOfListInfo)
     }
 
     //helper function for defaultMap()
@@ -245,12 +259,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun stringifyMap(){
+        //to write new data to file
         val gson = Gson()
         val json = gson.toJson(mapOfAllLists)
         writeFile(fileName,json)
     }
 
     private fun defaultMap(){
+        //create default map if app being opened for the first time, and data file doesnt exist yet
         val listOfLists = mutableListOf("Verbs","Nouns","Adjectives")
 
         val words1 = arrayOf("寝る", "走る","食べる")
@@ -277,9 +293,12 @@ class MainActivity : AppCompatActivity() {
             arrayOfListInfo.add(unit)
         }
 
+        arrayOfListInfoCopy = ArrayList(arrayOfListInfo)
+
     }
 
     private fun clearSearchFocus(){
+        //clear focus on search bar if user clicks outside it
         mainparent.setOnTouchListener{ _, _ ->
             if (searchBar.hasFocus()){
                 searchBar.clearFocus()
