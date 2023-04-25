@@ -69,6 +69,7 @@ class MainActivity : AppCompatActivity() {
                     adapterMiddle.clear()
                     adapterMiddle.addAll(ArrayList(arrayOfListInfo))
                     adapterMiddle.notifyDataSetChanged()
+                    adapterMiddle.filter.filter(searchBar.query)
                 }
             }
         }
@@ -99,8 +100,11 @@ class MainActivity : AppCompatActivity() {
             println("array in addbtn")
             println(arrayOfListInfo)
             adapterMiddle.clear()
-            adapterMiddle.addAll(ArrayList(arrayOfListInfo))
+            adapterMiddle.addAll(ArrayList(arrayOfListInfoCopy))
+            println("array in addbtn")
+            println(arrayOfListInfo)
             adapterMiddle.notifyDataSetChanged()
+            searchBar.setQuery("",false)
         }
 
         profile.setOnClickListener{
@@ -199,6 +203,7 @@ class MainActivity : AppCompatActivity() {
         }
         else {
             defaultMap()
+            stringifyMap()
         }
     }
 
