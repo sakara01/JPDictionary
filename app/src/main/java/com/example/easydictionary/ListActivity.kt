@@ -3,13 +3,11 @@ package com.example.easydictionary
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
+import android.speech.tts.Voice
 import android.view.View
 import android.view.animation.AlphaAnimation
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +24,8 @@ import kotlin.collections.ArrayList
 
 class ListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityListBinding
-    private lateinit var wordList: ArrayList<Word>
+    private var wordList= ArrayList<Word>()
+    private var copyList= ArrayList<Word>()
     private lateinit var backBtn : ImageButton
     private lateinit var btnHideWord : ImageView
     private lateinit var btnHideDef : ImageView
@@ -38,8 +37,8 @@ class ListActivity : AppCompatActivity() {
     private lateinit var constraint2: ConstraintLayout
     private lateinit var constraint3: ConstraintLayout
     private var mainListStr: String? = null
-    private lateinit var copyList: ArrayList<Word>
     private lateinit var theme: String
+    private lateinit var tts: TextToSpeech
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,18 +50,40 @@ class ListActivity : AppCompatActivity() {
         binding = ActivityListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        listName = findViewById(R.id.etListName)
+        var name = intent.extras?.getString("name")
+        if (name != "new list")listName.setText(name)
+
         mainListStr = intent.extras?.getString("mainList")
         var gson = Gson()
         val newArray = object : TypeToken<ArrayList<Word>>() {}.type
-        wordList = gson.fromJson(mainListStr, newArray)
-        copyList = gson.fromJson(mainListStr, newArray)
+        if (mainListStr != "null"){
+            wordList = gson.fromJson(mainListStr, newArray)
+            copyList = gson.fromJson(mainListStr, newArray)
+        }
+
+        //text to speech
+        tts = TextToSpeech(this, TextToSpeech.OnInitListener { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                // Set the language for TTS
+                println("tts setup success")
+                val result = tts.setLanguage(Locale.JAPAN)
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    println("language error")
+                }
+                tts.setEngineByPackageName("com.example.ttsengine")
+                tts.voice = Voice("ja-jp-x-jab-network", Locale.JAPAN, 1,1, false, null)
+            } else {
+                // Handle TTS initialization error
+                println("init error")
+            }
+        })
 
 
         backBtn = findViewById(R.id.btnBack)
         btnHideWord = findViewById(R.id.btnHideWord)
         btnHideDef = findViewById(R.id.btnHideDef)
         btnAdd= findViewById(R.id.btnAdd)
-        listName = findViewById(R.id.etListName)
         constraint1 = findViewById(R.id.constraint1)
         constraint2 = findViewById(R.id.constraint2)
         constraint3 = findViewById(R.id.constraint3)
@@ -76,14 +97,21 @@ class ListActivity : AppCompatActivity() {
         binding.lvWordList.adapter = adapterMiddle
 
         backBtn.setOnClickListener{
-            val gson = Gson()
-            showAllWords()
-            showAllDefs()
-            val json: String = gson.toJson(wordList)
-            val intent = Intent().apply { putExtra("result", json) }
-            setResult(RESULT_OK, intent)
-            finish()
-            Animatoo.animateSlideRight(this)
+            var entered = listName.text.toString()
+            if (entered.isNullOrEmpty() && wordList.isNotEmpty() ){
+                Toast.makeText(this, "You must name the list to save changes",Toast.LENGTH_SHORT).show()
+            }else {
+                val gson = Gson()
+                showAllWords()
+                showAllDefs()
+                val json: String = gson.toJson(wordList)
+                val intent = Intent().apply { putExtra("result", json); putExtra("name",entered)}
+                setResult(RESULT_OK, intent)
+                tts.stop()
+                tts.shutdown()
+                finish()
+                Animatoo.animateSlideRight(this)
+            }
         }
 
         btnHideWord.setOnClickListener{
@@ -131,6 +159,8 @@ class ListActivity : AppCompatActivity() {
         val json: String = gson.toJson(wordList)
         val intent = Intent().apply { putExtra("result", json)}
         setResult(RESULT_OK, intent)
+        tts.stop()
+        tts.shutdown()
         finish()
         Animatoo.animateSlideRight(this)
     }
@@ -185,6 +215,11 @@ class ListActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun speak(position: Int){
+        var tospeak = wordList[position].hiragana
+        tts.speak(tospeak, TextToSpeech.QUEUE_FLUSH, null, null)
     }
 
 }

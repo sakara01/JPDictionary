@@ -8,6 +8,8 @@ import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.example.easydictionary.databinding.ActivityMainBinding
@@ -22,19 +24,19 @@ class MainActivity : AppCompatActivity() {
     private lateinit var addBtn: ImageButton
     private lateinit var myListView: ListView
     private lateinit var clickedList: String
-    private var mapOfAllLists= mutableMapOf<String, ArrayList<Word>>()
-    private lateinit var arrayOfListInfo: ArrayList<ListData>
+    private var mapOfAllLists= LinkedHashMap<String, ArrayList<Word>>()
+    var arrayOfListInfo= ArrayList<ListData>()
+    var arrayOfListInfoCopy= ArrayList<ListData>()
     private lateinit var theme: String
     private lateinit var profile: FrameLayout
     private val fileName = "data.txt"
+    private lateinit var searchBar: SearchView
+    private lateinit var mainparent: ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         theme = intent.extras?.getString("theme").toString()
         if (theme == "null"){theme ="Light" }
-
-        if (theme == "Dark"){setTheme(R.style.Dark) }
-        else {setTheme(R.style.Light)}
-
+        setTheme(if (theme == "Dark") R.style.Dark else R.style.Light)
         super.onCreate(savedInstanceState)
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.grey)
@@ -46,18 +48,10 @@ class MainActivity : AppCompatActivity() {
         addBtn = findViewById(R.id.btnAdd)
         myListView= findViewById(R.id.lvListOfLists)
         profile = findViewById(R.id.profile)
+        searchBar = findViewById(R.id.searchBar)
+        mainparent = findViewById(R.id.mainparent)
 
-
-        val listOfLists = mutableListOf("Verbs","Nouns","Adjectives")
-
-        arrayOfListInfo = ArrayList()
-
-        listOfLists.forEach { item ->
-            val unit = ListData(item, mapOfAllLists[item]!!.size)
-            arrayOfListInfo.add(unit)
-        }
-
-        val adapterMiddle = MainAdapter(this,arrayOfListInfo)
+        var adapterMiddle = MainAdapter(this,arrayOfListInfo)
         binding.lvListOfLists.adapter = adapterMiddle
 
         val startForResult = registerForActivityResult(
@@ -65,9 +59,17 @@ class MainActivity : AppCompatActivity() {
         ) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 var myResult = result.data!!.extras?.getString("result")
-                updateList(myResult)
-                stringifyMap()
-                adapterMiddle.notifyDataSetChanged()
+                var listname = result.data!!.extras?.getString("name")
+                if (!listname.isNullOrEmpty()){
+                    updateList(myResult, listname)
+                    stringifyMap()
+                    //println("array in startforResutl:")
+                    //println(arrayOfListInfo)
+                    adapterMiddle.clear()
+                    adapterMiddle.addAll(ArrayList(arrayOfListInfo))
+                    adapterMiddle.notifyDataSetChanged()
+                    adapterMiddle.filter.filter(searchBar.query)
+                }
             }
         }
 
@@ -79,9 +81,12 @@ class MainActivity : AppCompatActivity() {
             var gson = Gson()
             val intent = Intent(this,ListActivity::class.java)
 
-            val json: String = gson.toJson(mapOfAllLists[nameOfSelected.text])
+            val json: String = gson.toJson(mapOfAllLists[clickedList])
+            intent.putExtra("name",clickedList)
             intent.putExtra("mainList", json)
             intent.putExtra("theme",theme)
+
+            arrayOfListInfo = ArrayList(arrayOfListInfoCopy) //reset array to original
 
             startForResult.launch(intent)
             Animatoo.animateSlideLeft(this)
@@ -90,32 +95,88 @@ class MainActivity : AppCompatActivity() {
         addBtn.setOnClickListener{
             val unit = ListData("new list", 0)
             arrayOfListInfo.add(unit)
-            mapOfAllLists["new list"] = ArrayList<Word>()
+            arrayOfListInfoCopy.add(unit)
+            //println("array in addbtn")
+            //println(arrayOfListInfo)
+            adapterMiddle.clear()
+            adapterMiddle.addAll(ArrayList(arrayOfListInfoCopy))
+            //println("array in addbtn")
+            //println(arrayOfListInfo)
             adapterMiddle.notifyDataSetChanged()
+            searchBar.setQuery("",false)
         }
 
         profile.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)
-            if (theme == "Light"){
-                (intent.putExtra("theme", "Dark"))
-            } else {
-                (intent.putExtra("theme", "Light"))
-            }
+            intent.putExtra("theme", if (theme == "Light") "Dark" else "Light")
             startActivity(intent)
             finish()
         }
+
+        searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                searchBar.clearFocus()
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                adapterMiddle.filter.filter(newText)
+                return true
+            }
+        })
+
+        clearSearchFocus()  //clear search bar focus if user clicks outside it
+
     }
 
-    private fun updateList(myResult: String?){
+    private fun updateList(myResult: String?, listname: String?){
         var gson = Gson()
         val newArray = object : TypeToken<ArrayList<Word>>() {}.type
         var wordArray: ArrayList<Word> = gson.fromJson(myResult, newArray)
-        mapOfAllLists[clickedList] = wordArray
-        for (i in 0 until arrayOfListInfo.size) {
-            if (arrayOfListInfo[i].listName == clickedList){
-                arrayOfListInfo[i].numWords = mapOfAllLists[clickedList]!!.size
+
+        var save = clickedList
+        clickedList = listname!!
+        var interMap= LinkedHashMap<String, ArrayList<Word>>()
+
+        if (save == "new list"){
+            mapOfAllLists[clickedList] = wordArray   //updates mapofalllists with new arraylist
+        }
+        else if (save != clickedList) {  //name of list changed
+            mapOfAllLists.forEach { (key, value) ->
+                if (key != save) {
+                    interMap[key] = value
+                } else {
+                    interMap[clickedList] = wordArray
+                }
+            }
+            mapOfAllLists.clear()
+            interMap.forEach{(key, value)->
+                mapOfAllLists[key]= value
+            }
+        }else{  //name of list not changed
+            mapOfAllLists[clickedList] = wordArray   //updates mapofalllists with new arraylist
+        }
+
+        //remove arrayoflistinfo item if it is named "new list", and replace with actual name/data
+        val removed = arrayOfListInfo.removeIf { listelm ->
+            listelm.listName == "new list"
+        }
+        if (removed){
+            val unit = ListData(clickedList, wordArray.size)
+            arrayOfListInfo.add(unit)
+        }else {
+            arrayOfListInfo.forEach { listelm ->
+                if (listelm.listName == save) {
+                    listelm.numWords = wordArray.size
+                    if (save != clickedList) {
+                        listelm.listName = clickedList
+                    }
+                }
             }
         }
+        arrayOfListInfoCopy = ArrayList(arrayOfListInfo)
+        //println("array in updateList")
+        //println(arrayOfListInfo)
     }
 
     //helper function for defaultMap()
@@ -141,6 +202,7 @@ class MainActivity : AppCompatActivity() {
         }
         else {
             defaultMap()
+            stringifyMap()
         }
     }
 
@@ -181,25 +243,34 @@ class MainActivity : AppCompatActivity() {
 
     private fun parseMap(mapStr: String){
         var gson = Gson()
-        val map = object : TypeToken< MutableMap<String, ArrayList<Word>>>() {}.type
+        val map = object : TypeToken< LinkedHashMap<String, ArrayList<Word>>>() {}.type
         try {
-            var parsedMap: MutableMap<String, ArrayList<Word>> = gson.fromJson(mapStr, map)
+            var parsedMap: LinkedHashMap<String, ArrayList<Word>> = gson.fromJson(mapStr, map)
             mapOfAllLists = parsedMap
         } catch (e: IllegalStateException) {
             println("error: ${e.message} ")
         } catch (e: JsonSyntaxException) {
             println("error: ${e.message} ")
-
         }
+
+        //update arrayoflistinfo
+        mapOfAllLists.forEach { t, u ->
+            val unit = ListData(t, u.size)
+            arrayOfListInfo.add(unit)
+        }
+
+        arrayOfListInfoCopy = ArrayList(arrayOfListInfo)
     }
 
     private fun stringifyMap(){
+        //to write new data to file
         val gson = Gson()
         val json = gson.toJson(mapOfAllLists)
         writeFile(fileName,json)
     }
 
     private fun defaultMap(){
+        //create default map if app being opened for the first time, and data file doesnt exist yet
         val listOfLists = mutableListOf("Verbs","Nouns","Adjectives")
 
         val words1 = arrayOf("寝る", "走る","食べる")
@@ -221,6 +292,32 @@ class MainActivity : AppCompatActivity() {
         mapOfAllLists[listOfLists[1]] = createData(words2,hiragana2,romaji2,definitions2)
         mapOfAllLists[listOfLists[2]] = createData(words3,hiragana3,romaji3,definitions3)
 
+        listOfLists.forEach { item ->
+            val unit = ListData(item, mapOfAllLists[item]!!.size)
+            arrayOfListInfo.add(unit)
+        }
+
+        arrayOfListInfoCopy = ArrayList(arrayOfListInfo)
+
+    }
+
+    private fun clearSearchFocus(){
+        //clear focus on search bar if user clicks outside it
+        mainparent.setOnTouchListener{ _, _ ->
+            if (searchBar.hasFocus()){
+                searchBar.clearFocus()
+                println("should clear focus main parent")
+            }
+            false
+        }
+
+        myListView.setOnTouchListener{ _, _ ->
+            if (searchBar.hasFocus()){
+                searchBar.clearFocus()
+                println("should clear focus mylistview")
+            }
+            false
+        }
     }
 
 
