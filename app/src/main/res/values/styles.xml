@@ -11,6 +11,10 @@
         <item name="blueVariant">#1B51AC</item>
         <item name="greyOut">#676767</item>
         <item name="imageDark">#00000000</item>
+        <item name="android:textColorHint">?attr/greyOut</item>
+        <item name="android:editTextColor">?attr/texts</item>
+        <item name="android:textColorSecondary">?attr/blueVariant</item>
+
 
     </style>
 
@@ -25,7 +29,9 @@
         <item name="blueVariant">#507ECC</item>
         <item name="greyOut">#B5B5B5</item>
         <item name="imageDark">#34000000</item>
-
+        <item name="android:textColorHint">?attr/greyOut</item>
+        <item name="android:editTextColor">?attr/texts</item>
+        <item name="android:textColorSecondary">?attr/blueVariant</item>
 
     </style>
 </resources>

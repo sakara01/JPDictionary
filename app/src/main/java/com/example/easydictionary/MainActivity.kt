@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -64,8 +63,8 @@ class MainActivity : AppCompatActivity() {
                 if (!listname.isNullOrEmpty()){
                     updateList(myResult, listname)
                     stringifyMap()
-                    println("array in startforResutl:")
-                    println(arrayOfListInfo)
+                    //println("array in startforResutl:")
+                    //println(arrayOfListInfo)
                     adapterMiddle.clear()
                     adapterMiddle.addAll(ArrayList(arrayOfListInfo))
                     adapterMiddle.notifyDataSetChanged()
@@ -97,12 +96,12 @@ class MainActivity : AppCompatActivity() {
             val unit = ListData("new list", 0)
             arrayOfListInfo.add(unit)
             arrayOfListInfoCopy.add(unit)
-            println("array in addbtn")
-            println(arrayOfListInfo)
+            //println("array in addbtn")
+            //println(arrayOfListInfo)
             adapterMiddle.clear()
             adapterMiddle.addAll(ArrayList(arrayOfListInfoCopy))
-            println("array in addbtn")
-            println(arrayOfListInfo)
+            //println("array in addbtn")
+            //println(arrayOfListInfo)
             adapterMiddle.notifyDataSetChanged()
             searchBar.setQuery("",false)
         }
@@ -176,8 +175,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
         arrayOfListInfoCopy = ArrayList(arrayOfListInfo)
-        println("array in updateList")
-        println(arrayOfListInfo)
+        //println("array in updateList")
+        //println(arrayOfListInfo)
     }
 
     //helper function for defaultMap()
